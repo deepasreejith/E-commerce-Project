@@ -1,0 +1,74 @@
+<%-include('../layouts/admin_header.ejs') %>
+<h5 style="margin-left: 370px;margin-top: 20px;"><strong>OFFERS</strong></h5>
+<hr>
+<div id="page-content-wrapper" style="margin-left: 10px;margin-top: 20px; width: 70%; ">
+  
+<div class="container" >
+  <a style="margin-left: 1050px;" href="/admin/addcategoryoffer"><button type="button" class="btn btn-dark " >Add Categry Offer</button></a>
+<table class="table table-striped" style="margin-left: 350px; width: 870px;">
+    <thead>
+      <tr>
+        <th scope="col"><strong>Category</strong></th>
+        <th scope="col"><strong>Discount</strong></th>
+        <th scope="col"><strong>Status</strong></th>
+        <th scope="col"><strong>Actions</strong></th>
+      </tr>
+    </thead>
+    <tbody>
+        <% categoryOffer.forEach(function(item) { %>
+            <tr>
+              
+              <td><% item.category.forEach(function(category) { %>
+                <%= category.name %>
+            <% }); %></td>
+              <td><%= item.discount %></td>
+              <% if ( item.c_flag == 1) { %>
+              <td>Enabled</td>
+              <% } else { %>
+                <td>Disabled</td>
+                <% } %>
+              <td><a href="/admin/editcategoryoffer?id=<%= item._id %>" type="button" class="btn btn-success btn-sm">Edit </a>
+              <!--  <a href="/admin/deletesubcategory?id=<%= item._id %>" type="button" class="btn btn-danger btn-sm">Delete</a>  -->
+              <button class="btn btn-danger btn-sm deleteButton" data-categoryoffer-id="<%= item._id %>">Delete </button>
+
+            </td>
+            </tr>
+          <% }); %>
+    </tbody>
+  </table>
+  
+  <% if(typeof message !=='undefined'){
+    %>
+    <p style="color: rgb(8, 156, 23);">
+    <%= message %>
+    </p>
+    <%
+    }
+    %>
+</div>
+
+
+
+</div>
+</div>
+<script>
+  document.querySelectorAll('.deleteButton').forEach(function(button) {
+      button.addEventListener('click', function () {
+          // Get the category ID from the data attribute
+          const categoryofferId = this.getAttribute('data-categoryoffer-id');
+          
+          // Display a confirmation dialog
+          const result = confirm(`Are you sure want to delete ?`);
+
+          // If the user clicks "Yes," proceed to the delete action
+          if (result === true) {
+              // Redirect to the delete route with the category ID
+              window.location.href = `/admin/deletecategoryoffer?id=${categoryofferId}`;
+          }
+      });
+  });
+</script>
+
+
+
+<%-include('../layouts/admin_footer.ejs') %>

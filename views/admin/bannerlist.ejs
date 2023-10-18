@@ -1,0 +1,63 @@
+<%-include('../layouts/admin_header.ejs') %>
+<h5 style="margin-top: 20px;margin-left: 42rem;"><strong>BANNER</strong></h5>
+<hr>
+<div id="page-content-wrapper" style="margin-left: 270px;margin-top: 20px; width: 70%;  " >
+   
+    <br>
+  <div class="container"  >
+    <a style="margin-left: 750px; " href="/admin/addbanner"><button type="button" class="btn btn-dark " >Add Banner Image</button></a>
+    
+ 
+    <table class="table table-striped" style=" width: 800px; border: 2px solid #dbcdcd; padding: 20px;box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);margin-top: 30px; ">
+      <thead>
+        <tr>
+          <th scope="col"><strong>Image</strong></th>
+          
+          <th scope="col"><strong>Actions</strong></th>
+        </tr>
+      </thead>
+      <tbody>
+          <% banner.forEach(function(item) { %>
+              <tr>
+                <td><img src="bannerimages/<%= item.image %>" style="width:150px; height:50px"  alt="<%= item.image %>"></td>
+                
+                <td><a href="/admin/editbanner?id=<%= item._id %>" type="button" class="btn btn-success btn-sm">Edit </a>
+                
+                <button class="btn btn-danger btn-sm deleteButton" data-banner-id="<%= item._id %>">Delete </button>
+  
+              </td>
+              </tr>
+            <% }); %>
+      </tbody>
+    </table>
+    <% if(typeof message !=='undefined'){
+      %>
+      <p style="color: rgb(8, 156, 23);">
+      <%= message %>
+      </p>
+      <%
+      }
+      %>
+      
+  </div>
+  
+  </div>
+  <script>
+    document.querySelectorAll('.deleteButton').forEach(function(button) {
+        button.addEventListener('click', function () {
+            // Get the category ID from the data attribute
+            const bannerId = this.getAttribute('data-banner-id');
+            
+            // Display a confirmation dialog
+            const result = confirm(`Are you sure want to delete ?`);
+  
+            // If the user clicks "Yes," proceed to the delete action
+            if (result === true) {
+                // Redirect to the delete route with the category ID
+                window.location.href = `/admin/deletebanner?id=${bannerId}`;
+            }
+        });
+    });
+  </script>
+
+<%-include('../layouts/admin_footer.ejs') %>

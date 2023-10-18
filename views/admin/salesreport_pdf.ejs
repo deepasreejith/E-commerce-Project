@@ -1,0 +1,66 @@
+<div class="sales-report">
+<h5 style="align-items: center;"><strong>SALES REPORT</strong></h5>
+<hr>
+<div class="table-container">
+        <table class="table table-bordered" id="salesTable"style="width: 100%;">
+            <thead>
+                <tr>
+                    <th><b>S.No</b></th>
+                    <th><b>Date</b></th>
+                    <th><b>Total Orders</b></th>
+                    <th><b>Total Amount</b></th>
+                    <th><b>Discount Amount</b></th>
+                    <th><b>Subtotal</b></th>
+                </tr>
+                
+            </thead>
+            
+            <tbody>
+                <% totalSale.forEach(function(item, index) { %>
+                <tr data-bs-toggle="collapse" data-bs-target="#collapseExample<%= index %>" aria-expanded="false"
+                    aria-controls="collapseExample<%= index %>">
+                    <td><%= index + 1 %></td>
+                    <td><%= item.date %></td>
+                    <td><%= item.totalOrders %></td>
+                    <td><%= item.totalAmount %></td>
+                    <td><%= item.totalDiscount %></td>
+                    <td><%= item.totalSubtotal %></td>
+                    
+                </tr>
+                
+                <tr>
+                    <td colspan="6" class="p-0">
+                        <div class="collapse" id="collapseExample<%= index %>">
+                            <table class="inner-table table-bordered" style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Order ID</th>
+                                        <th>Total</th>
+                                        <th>Discount</th>
+                                        <th>Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% item.orders.forEach(function(order) { %>
+                                    <tr>
+                                        <td><%= item.date %></td>
+                                        <td><%= order.OrderID %></td>
+                                        <td><%= order.total %></td>
+                                        <td><%= order.discount %></td>
+                                        <td><%= order.subtotal %></td>
+                                    </tr>
+                                    <% }); %>
+                                    <!-- Add more order details for this date if needed -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+                <% }); %>
+                <!-- Add more rows with the same structure for each date -->
+            </tbody>
+        </table>
+    </div>
+    </div>
+   

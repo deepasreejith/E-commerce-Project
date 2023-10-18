@@ -1,0 +1,29 @@
+.main{
+  font-family:Georgia, 'Times New Roman', Times, serif;
+    background-color: rgb(250, 248, 250);
+}
+  .sidebar {
+    width: 250px;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    overflow-y: auto;
+   
+    
+}
+li{
+  list-style: none;
+}
+
+.submenu {
+    display: none;
+    margin-left: 10px;
+}
+
+.submenu.active {
+    display: block;
+}

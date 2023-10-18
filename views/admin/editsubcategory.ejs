@@ -1,0 +1,57 @@
+<%-include('../layouts/admin_header.ejs') %>
+
+<div id="page-content-wrapper" style="margin-left: 200px;">
+  <h5 style="margin-top: 20px;margin-left: 42rem;margin-top: 20px;"><strong>EDIT SUBCATEGORY</strong></h5>
+  <HR>
+    <div class="container" style="width: 50%; height: auto; margin-top: 100px;border: 2px solid #dbcdcd; padding: 20px;box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);">
+    <form action="" method="post" enctype="multipart/form-data">
+        <div class="form-group" >
+            <label for="subcategeoryname"><b>Subcategory </b></label>
+            <input type="text" name="name" class="form-control" value="<%= subcategory[0].name %>" id="subcategeoryname" required>
+           
+          </div>
+          <br>
+          <div class="form-group">
+            <label><b>Image</b></label>
+            <br>
+            <img id="subcategoryImage" src="subcategoryimages/<%= subcategory[0].image %>" width="60px" height="50px" alt="<%= subcategory[0].image %>">
+            <input type="text" name="cimage" class="form-control" value="<%= subcategory[0].image %>" id="categeory" style="display: none;" >
+            <!--   <label for="exampleFormControlFile1">Upload Image</label>  -->
+            <input type="file" name="image" class="form-control-file" id="exampleFormControlFile1">
+            
+          </div>
+        <br>
+
+          <div class="form-group">
+            <label for="combobox"><b>Select categeory</b></label>
+        <select class="custom-select" id="combobox" name="combobox">
+          
+            <% categories.forEach(function(category) { %>
+              <option value="<%= category._id %>" <% if (category.name === categorydata[0].name) { %>selected<% } %>><%= category.name %></option>
+            <% }); %>
+          </select>
+          </div>
+         <br>
+        <button class="btn btn-dark " type="submit">Update</button>
+        
+      </form>
+    </div>
+
+  </div>
+</div>
+
+        <script>
+            const subcategoryImage = document.getElementById('subcategoryImage');
+            console.log(subcategoryImage)
+            const imageInput = document.getElementById('exampleFormControlFile1');
+            imageInput.addEventListener('change', function () {
+            const selectedImage = this.files[0]; // Get the selected file
+
+            if (selectedImage) {
+             const imageURL = URL.createObjectURL(selectedImage); // Create a URL for the selected image
+             subcategoryImage.src = imageURL; // Update the image source
+             console.log("new url:"+imageURL)
+             }
+            });
+        </script>
+    <%-include('../layouts/admin_footer.ejs') %>

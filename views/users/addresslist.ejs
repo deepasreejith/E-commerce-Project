@@ -1,0 +1,82 @@
+<%-include('../layouts/header.ejs') %>
+<style>
+  .address-box {
+    border: 2px solid rgb(250, 191, 241);
+    border-radius: 20px;
+    padding: 15px;
+    margin: 20px;
+    width: auto; /* Adjust the width as needed */
+    height: auto;
+  }
+</style>
+<div class="container col-md-12" style=" padding-top: 30px;  " >
+  
+  <a href="/addaddress" > <button type="button" class="btn btn-light "  style="background-color: rgb(250, 191, 241); width: 200px; height: 40px; font-size: large; margin-left: 900px; border-radius: 25px;"   >+ Add Address</button></a>
+    
+  
+    <br>
+    
+    <div class="form-check address-box" style=" padding: 15px;margin-left: 70px; ">
+      <h5 style="color: rgb(154, 8, 132) ;text-align: center;"  >Choose Delivery Address</h5>
+      <div class="row"  >
+      <% address.forEach(function(item) { %>
+          <div class="col-sm-6" >
+            <div class="card " style="width: 30rem; margin-bottom: 10px;border-color: rgb(250, 191, 241) ; ">
+            <div class="card-body">
+            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="<%= item._id %>" checked>
+            <p><%= item.name %></p>
+            <p><%=item.address %></p>
+            <p>PIN: <%=item.pin %></p>
+            <p>Mobile no: <%=item.mobile %></p>
+           </div>
+          </div>
+          </div>
+      <% }); %> 
+      </div>
+    </div >
+  
+
+
+ <a href="/payment"  > <button type="button" class="btn btn-light" style="background-color: rgb(250, 191, 241);  width: 200px; height: 40px; font-size: large; margin-left: 900px; border-radius: 25px;" onclick= "sendSelectedAddress()" >Next</button></a>
+ 
+</div>
+
+<script>
+    function sendSelectedAddress() {
+  const selectedRadio = document.querySelector('input[name="flexRadioDefault"]:checked');
+
+  if (selectedRadio) {
+    const selectedId = selectedRadio.value;
+
+    fetch('/payment', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ id: selectedId })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+     
+      return response.json();
+    })
+    .then(data => {
+      console.log('Server response:', data);
+      // Handle the server's response if needed
+      const add = selectedId;
+      console.log("add:"+add)
+        // Redirect to the specified URL
+        window.location.href = `/paymentpage?id=${selectedId}`;  // Change this to match your desired URL
+      
+    })
+    .catch(error => console.error('Error:', error));
+  } else {
+    console.error('No radio button selected.');
+  }
+}
+
+</script>
+
+<%-include('../layouts/footer.ejs') %>

@@ -1,0 +1,50 @@
+<%-include('../layouts/admin_header.ejs') %>
+
+<div id="page-content-wrapper">
+
+<div class="container" style="width: 50%; height: 70%; margin-top: 150px;">
+    <form action="" method="post" >
+        
+        
+        <br>
+        <label for="combobox">Select categeory</label>
+        <select class="custom-select" id="combobox" name="combobox">
+          
+            <% categories.forEach(function(category) { %>
+              <option value="<%= category._id %>" <% if (category.name === categorydata[0].name) { %>selected<% } %>><%= category.name %></option>
+            <% }); %>
+          </select>
+          <br>
+          <br>
+          <div class="form-group" >
+            <label for="discount">Discount</label>
+            <input type="text" name="discount" class="form-control" id="discount" value="<%= category_offer[0].discount %>">
+           
+          </div>
+          <br>
+          <div class="form-group">
+            <label for="status">Category offer</label>
+            <select class="form-control " id="status" name="status">
+              
+                <option value="1" <% if ( category_offer[0].c_flag === 1) { %>selected<% } %>> Enabled</option>
+                <option value="0" <% if ( category_offer[0].c_flag === 0) { %>selected<% } %>> Disabled</option>
+                
+              </select>
+          </div>
+          <br>
+        <button class="btn btn-dark "  type="submit">update offer</button>
+        <% if(typeof message !=='undefined'){
+          %>
+          <p style="color: rgb(8, 156, 23);">
+          <%= message %>
+          </p>
+          <%
+          }
+          %>
+      </form>
+    </div>
+
+
+  </div>
+</div>
+<%-include('../layouts/admin_footer.ejs') %>

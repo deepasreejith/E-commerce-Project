@@ -1,0 +1,138 @@
+<%-include('../layouts/admin_header.ejs') %>
+<h5 style="margin-top: 20px;margin-left: 42rem;"><strong>ORDER DETAILS</strong></h5>
+<hr>
+
+<!--<div id="page-content-wrapper">-->
+    <div class="small-container cart-page" style="margin-left: 170px;margin-top: 20px;">
+      <div style="display: flex;  margin-left: 100px; width: 55%; justify-content: space-between; ">
+      <h5 style=" float: left;">Order Id :  <%= orderDetail[0].OrderID %> </h5>
+      <div >
+      <% if ( orderStatus == 1) { %>
+        <h5 >Completed</h5>
+        <% } else if ( orderStatus == 2 ) { %>
+         <h5>Canelled</h5>
+         <% } else if ( orderStatus == 3 ) { %>
+           <h5>Delivered</h5>
+         <% } else if ( orderStatus == 4 ) { %>
+             <h5>Returned</h5>
+           <% } else if ( orderStatus == 5 ) { %>
+         <h5>Processing</h5>
+         <% } else if ( orderStatus == 6 ) { %>
+          <h5>Returned</h5>
+          <% } else if ( orderStatus == 7 ) { %>
+            <h5>Delivered with Returned</h5>
+         <% } %>
+        </div>
+      </div>   
+    <div style="display: flex;">
+      <table style=" border-collapse: collapse;margin-bottom: 200px; padding: 20px; border-radius: 20px;background-color: white;">
+        <tr>
+          
+            <th><strong> Product</strong></th>
+            <th><strong>Quantity</strong></th>
+            <th><strong>Subtotal</strong></th>
+            <% if ( orderDetail[0].order_status === 7) { %>
+              <th></th>
+              <% } %>
+            
+        </tr>
+        <% let overallTotal = 0; %>
+        <% orderDetail.forEach(function(item) { %>
+          <% let subtotal = item.quantity * item.productDetails.selling_price; %>
+            <% overallTotal += subtotal; %>
+        <tr>
+            <td>
+             
+              <div class="cart-info">
+                <img src="productimages/<%= item.productDetails.images[0] %>"  width="60px" height="50px">
+                <div>
+                  <p><strong><%= item.productDetails.name %></strong></p>
+                  <small>Rs: <%= item.productDetails.selling_price %></small>
+                  
+                </div>
+              </div>
+              
+            </td>
+            <td><%= item.quantity %></td>
+            <td id="subtotal<%= item.item %>"><%= subtotal %></td>
+            <% if ( orderDetail[0].order_status === 7) { %>
+              <% if (item.return_status === 1) { %>
+                <td style="color: red;">Item Returned</td>
+              
+                <% } %>
+            <% } %>
+        </tr>
+        <% }); %>
+    </table>
+
+    <div class="rightportion" style="display: block;">
+
+      <div class="total-price" style=" margin-left: 50px;border: 2px solid #dbcdcd; padding: 20px; border-radius: 20px;box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); height:340px ; width: 350px;">
+        <h5><strong>Payment Details</strong></h5>
+        <table  style="margin-left: 10px; width: 300px; height:250px ;background-color: rgb(236, 240, 219); border-radius: 25px ; ">
+     
+      <tr>
+        <td><strong>Total</strong></td>
+        <td id="total">Rs: <%= orderDetail[0].total %></td>
+      </tr>
+      <tr>
+        <td><strong>Coupon Code</strong></td>
+        <td id="code"><%= orderDetail[0].couponcode %></td>
+      </tr>
+      <tr>
+        <td><strong>Discount Amount</strong></td>
+        <td id="code">Rs: <%= orderDetail[0].discountAmount %> </td>
+      </tr>
+      <tr>
+      <td><strong>Subtotal</strong></td>
+      <td id="subtotal">Rs: <%= orderDetail[0].subtotal %></td>
+    </tr>
+     
+    </table>
+    
+      </div>
+
+      <% if ( orderDetail[0].payment === '4' ) { %>
+        <div class="address col-md-4" style="margin-left:50px; margin-top: 25px; border: 2px solid #dbcdcd; padding: 20px; border-radius: 20px;box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); height:180px ; width: 350px; ">
+          <h5><strong>Transaction Details</strong></h5>
+            <table  style="margin-left: 10px; width: 300px; height:100px ;background-color: rgb(236, 240, 219); border-radius: 25px ; ">
+             
+                <tr>
+                  <td><strong>wallet Amount</strong></td>
+                  <td >Rs: <%= orderDetail[0].walletAmount %></td>
+                </tr>
+                <tr>
+                  <td><strong>netbanking Amount</strong></td>
+                  <td >Rs: <%= orderDetail[0].netbankingAmount %></td>
+                </tr>
+                
+            </table>
+            
+        </div>
+        <% } %>
+    
+    <div class="address col-md-4" style="margin-left:50px; margin-top: 25px;  border: 2px solid #dbcdcd; padding: 20px; border-radius: 20px;box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); height:300px ; width: 350px; " >
+      <h5><strong>Address Details</strong></h5>
+      <div class="card" style="width: 19rem; height: 13rem; background-color: rgb(236, 240, 219);border-radius: 25px;">
+          <div class="card-body">
+            
+            <p class="card-text"><%=orderDetail[0].address.name %> </p>
+            <p class="card-text"><%=orderDetail[0].address.address %></p>
+            <p class="card-text">PIN: <%=orderDetail[0].address.pin %></p>
+            <p class="card-text">Mobile no: <%=orderDetail[0].address.mobile %></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  
+</div>
+
+
+
+
+
+
+<%-include('../layouts/admin_footer.ejs') %>

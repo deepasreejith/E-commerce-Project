@@ -1,0 +1,111 @@
+<%-include('../layouts/header.ejs') %>
+<br>
+<h5 style="padding-left: 150px;"><strong>Order Details</strong></h5>
+    <div class="container"  style="width: 80%;   text-align:left;border: 2px solid #dbcdcd; padding: 20px; border-radius: 20px;box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);">
+        <table class="table table-striped" style="margin-left: 15px;">
+            <thead>
+              <tr>
+                <th scope="col"><strong>Order ID</strong></th>
+                <th scope="col"><strong>Date</strong></th>
+                <th scope="col"><strong>Amount</strong></th>
+                <th scope="col"><strong>Payment</strong></th>
+                <th scope="col"><strong>Status</strong></th>
+                <th scope="col" style="text-align: left;"><strong>Action</strong></th>
+              </tr>
+            </thead>
+            <tbody>
+                <% order.forEach(function(item) { %>
+                    <tr>
+                      <td><%= item.OrderID %></td>
+                      <td><%= moment(item.date).format('YYYY-MM-DD HH:mm:ss') %></td>
+                      <td><%= item.subtotal %> </td>
+                      <% if ( item.payment === '1' ) { %>
+                        <td>Cash on Delivery</td>
+                        <% } else if (item.payment === '2') { %>
+                          <td>Netbanking</td>
+                      <% } else if (item.payment === '3') { %>
+                        <td>Wallet</td>
+                        <% } else { %>
+                          <td>Wallet+Netbanking</td>
+                        <% } %>
+
+                        <% if ( item.order_status === 1) { %>
+                       <td>Completed</td>
+                       <% } else if ( item.order_status === 2 ) { %>
+                        <td>Cancelled</td>
+                        <% } else if ( item.order_status === 3 ) { %>
+                          <td>Delivered</td>
+                        <% } else if ( item.order_status === 4 ) { %>
+                          <td>Returned</td> 
+                        <% } else if ( item.order_status === 5 ) { %>
+                        <td>Processing</td>
+                        <% } else if ( item.order_status === 6 ) { %>
+                          <td>Rejected</td>
+                        <% } else if (  item.order_status === 7 ) { %>
+                          <td>Delivered with Returned</td>
+                        <% } %>
+                     
+                        <td style="display: inline-block;"><a href="/orderdetails?id=<%= item._id %>" type="button" class="btn btn-light btn-sm" style="background-color: rgb(250, 191, 241);">View Details </a>
+                          <% if ( item.order_status === 1  ) { %>
+                            <button class="btn btn-success btn-sm cancelButton" data-order-id="<%= item._id %>">Cancel </button>
+                            <% } %>   
+
+                    </tr>
+                    <% }); %>
+            </tbody>
+          </table>
+          <nav aria-label="Page navigation example" style="margin-top: 30px; position: sticky;">
+            <ul class="pagination justify-content-center" >
+                <li class="page-item <%=(currentPage == 1) ? 'disabled' : ''%>">
+                    <a class="page-link" href="?page=<%=(parseInt(currentPage) - 1)%>" tabindex="-1" aria-disabled="true" style="color: black;">Previous</a>
+                </li>
+                <% for (let i = 1; i <= totalPages; i++) { %>
+                    <li class="page-item <%= (i == currentPage) ? 'active' : '' %>">
+                        <a class="page-link" href="?page=<%= i %>" style="color: black;"><%= i %></a>
+                    </li>
+                <% } %>
+                <li class="page-item <%=(currentPage == totalPages) ? 'disabled' : ''%>">
+                    <a class="page-link" href="?page=<%=(parseInt(currentPage) + 1)%>" style="color: black;">Next</a>
+                </li>
+            </ul>
+        </nav>
+          
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+        <script>
+          document.querySelectorAll('.cancelButton').forEach(function(button) {
+              button.addEventListener('click', function () {
+                 
+                  const orderId = this.getAttribute('data-order-id');
+                  
+                  // Display a confirmation dialog
+                  const result = confirm(`Are you sure want to cancel ?`);
+        
+                  // If the user clicks "Yes," proceed to the delete action
+                  if (result === true) {
+                      // Redirect to the delete route with the category ID
+                      window.location.href = `/cancelorder?id=${orderId}`;
+                  }
+              });
+          });
+          
+         
+
+          document.querySelectorAll('.returnButton').forEach(function(button) {
+              button.addEventListener('click', function () {
+                 
+                  const orderId = this.getAttribute('data-order-id');
+                  
+                  // Display a confirmation dialog
+                  const result = confirm(`Are you sure want to Return this order ?`);
+        
+                  // If the user clicks "Yes," proceed to the delete action
+                  if (result === true) {
+                      // Redirect to the delete route with the category ID
+                      window.location.href = `/returnorder?id=${orderId}`;
+                  }
+              });
+          });
+        </script>
+
+<%-include('../layouts/footer.ejs') %>

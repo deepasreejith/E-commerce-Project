@@ -1,0 +1,114 @@
+<%-include('../layouts/admin_header.ejs') %>
+<h5 style="margin-left: 42rem;margin-top: 20px;"><strong>SALES REPORT</strong></h5>
+<hr>
+<div id="page-content-wrapper" style="margin-left: 250px;margin-top: 20px; width: 80%; ">
+    <form action="" method="post"> 
+    <div class="container mt-3">
+      
+        <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="sdate">Start Date</label>
+                <div class="input-group date" id="datepicker">
+                  <input type="text" class="form-control" id="sdate" value="" name="sdate"  />
+                  <div class="input-group-append" style="cursor: pointer;">
+                    <span class="input-group-text bg-light d-block">
+                      <i class="fa fa-calendar"></i>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="edate">End Date</label>
+                <div class="input-group date" id="datepicker2">
+                  <input type="text" class="form-control" id="edate" value="" name="edate"/>
+                  <div class="input-group-append" style="cursor: pointer;">
+                    <span class="input-group-text bg-light d-block">
+                      <i class="fa fa-calendar"></i>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+            <button type="submit" class="btn btn-dark" style="margin-top: 25px;" name="action" value="submit">Submit</button>
+            </div>
+            <div class=" col-md-2" role="group" style="margin-top: 25px;" >
+              <button id="btnGroupDrop1" type="button" class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                Download
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                <li><a class="dropdown-item" href="/admin/salesreport_excel">Excel</a></li>
+                <li><a class="dropdown-item" href="/admin/salesreport_pdf">PDF</a></li>
+              </ul>
+            </div>
+          </div>
+          <br>
+        <table class="table table-bordered" style="margin-left: 0;" id="salesTable">
+            <thead>
+                <tr>
+                    <th><b>S.No</b></th>
+                    <th><b>Date</b></th>
+                    <th><b>Total Orders</b></th>
+                    <th><b>Total Amount</b></th>
+                    <th><b>Discount Amount</b></th>
+                    <th><b>Subtotal</b></th>
+                </tr>
+            </thead>
+            <tbody>
+                <% totalSale.forEach(function(item, index) { %>
+                <tr data-bs-toggle="collapse" data-bs-target="#collapseExample<%= index %>" aria-expanded="false"
+                    aria-controls="collapseExample<%= index %>">
+                    <td><%= index + 1 %></td>
+                    <td><%= item.date %></td>
+                    <td><%= item.totalOrders %></td>
+                    <td><%= item.totalAmount %></td>
+                    <td><%= item.totalDiscount %></td>
+                    <td><%= item.totalSubtotal %></td>
+                    <td>+</td>
+                </tr>
+                
+                <tr>
+                    <td colspan="6" class="p-0">
+                        <div class="collapse" id="collapseExample<%= index %>">
+                            <table class="table table-bordered" style="margin-left: 0;">
+                                <thead>
+                                    <tr>
+                                        <th><b>Date</b></th>
+                                        <th><b>Order ID</b></th>
+                                        <th><b>Total</b></th>
+                                        <th><b>Discount</b></th>
+                                        <th><b>Subtotal</b></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% item.orders.forEach(function(order) { %>
+                                    <tr>
+                                        <td><%= item.date %></td>
+                                        <td><%= order.OrderID %></td>
+                                        <td><%= order.total %></td>
+                                        <td><%= order.discount %></td>
+                                        <td><%= order.subtotal %></td>
+                                    </tr>
+                                    <% }); %>
+                                    <!-- Add more order details for this date if needed -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+                <% }); %>
+                <!-- Add more rows with the same structure for each date -->
+            </tbody>
+        </table>
+     
+    </div>
+</form>
+      
+</div>
+
+
+<%-include('../layouts/admin_footer.ejs') %>

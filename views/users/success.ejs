@@ -1,0 +1,25 @@
+<%-include('../layouts/header.ejs') %>
+
+
+<div class="alert alert-danger col-md-6 box" style="margin-left: 350px; text-align: center; margin-top: 100px;margin-bottom: 180px;height: 300px;border: 2px solid #dbcdcd; padding: 20px; border-radius: 20px;box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); background-color: rgb(245, 235, 244);"  role="alert">
+  <% if (message === 'Order placed successfully!') { %>
+  <i class="fa-solid fa-circle-check" style="color: #08aa13;"></i>
+  <% } else { %>
+    <i class="fa-solid fa-circle-xmark" style="color: #ff0000;"></i>
+    <% } %>
+    <h4 class="alert-heading"><%= message %></h4>
+    <br>
+    <% if (message === 'Order placed successfully!') { %>
+    <p>Your order ID is: <strong><%= newOrderId %></strong> </p>
+    <% } else { %>
+      <p>Your Reference ID is: <strong><%= newOrderId %></strong> </p> 
+      <% } %>
+      <br>
+    <hr>
+    <br>
+    <a href="/orderdetails?id=<%= orderId %>" style="margin-right: 200px;" >  View Details</a>
+    <a href="/home" style="margin-left: 200px;" > Back to Home </a>
+    <a href="/download_invoice?id=<%= orderId %>" style="color: #ff0000;">Download Invoice <i class="fa-solid fa-file-arrow-down" style="color: #f10404;"></i></a>
+  </div>
+
+<%-include('../layouts/footer.ejs') %>

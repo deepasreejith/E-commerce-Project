@@ -1,0 +1,94 @@
+<%-include('../layouts/admin_header.ejs') %>
+<h5 style="margin-left: 42rem;margin-top: 20px;"><strong> SALES RETURN REPORT</strong></h5>
+<hr>
+<div id="page-content-wrapper" style="margin-left: 250px;margin-top: 20px; width: 80%; ">
+  <form action="" method="post">
+    <div class="container">
+    <!--  <div class="btn-group" role="group" style="float: right;">
+        <button id="btnGroupDrop1" type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          Download
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+          <li><a class="dropdown-item" href="/admin/returnreport_excel">Excel</a></li>
+          <li><a class="dropdown-item" href="/admin/returnreport_pdf">PDF</a></li>
+        </ul>
+      </div>-->
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="sdate">Start Date</label>
+            <div class="input-group date" id="datepicker">
+              <input type="text" class="form-control" id="sdate" value="" name="sdate"  />
+              <div class="input-group-append" style="cursor: pointer;">
+                <span class="input-group-text bg-light d-block">
+                  <i class="fa fa-calendar"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="edate">End Date</label>
+            <div class="input-group date" id="datepicker2">
+              <input type="text" class="form-control" id="edate" value="" name="edate"/>
+              <div class="input-group-append" style="cursor: pointer;">
+                <span class="input-group-text bg-light d-block">
+                  <i class="fa fa-calendar"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2">
+        <button type="submit" class="btn btn-dark" style="margin-top: 25px;" name="action" value="submit">Submit</button>
+        </div>
+        <div class=" col-md-2" role="group" style="margin-top: 25px;">
+          <button id="btnGroupDrop1" type="button" class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            Download
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+            <li><a class="dropdown-item" href="/admin/returnreport_excel">Excel</a></li>
+            <li><a class="dropdown-item" href="/admin/returnreport_pdf">PDF</a></li>
+          </ul>
+        </div>
+      </div>
+      <br>
+        <table class="table table-bordered " style="margin-left: 0; ">
+            <thead>
+              <tr>
+                <th><b>Date</b></th>
+                <th><b>Order ID</b></th>
+                <th><b>Products</b></th>
+                <th><b>Quantity</b></th>
+                <th><b>Price</b></th>
+                <th><b>Total</b></th>
+                <th><b>Total Amount</b></th>
+              </tr>
+            </thead>
+            <tbody>
+            <% returnOrder.forEach(function(order) { %>
+                <% order.orders.forEach(function(item, index) { %>
+                  <tr >
+                    <% if (index === 0) { %>
+                      <td rowspan="<%= order.productCount %>"><%= order._id.formattedDate %></td>
+                      <td rowspan="<%= order.productCount %>"><%= order._id.OrderID %></td>
+                    <% } %>
+                    <td><%= item.productName %></td>
+                    <td><%= item.quantityOrdered %></td>
+                    <td><%= item.mrp %></td>
+                    <td style="text-align: left;"><%= item.total %></td>
+                    <% if (index === 0) { %>
+                      <td rowspan="<%= order.productCount %>"><%= order.totalAmount %></td>
+                      <% } %>
+                    </tr>
+                <% }); %>
+              <% }); %>
+            </tbody>
+          </table>
+      </div>
+  </form>  
+</div>
+
+<%-include('../layouts/admin_footer.ejs') %>

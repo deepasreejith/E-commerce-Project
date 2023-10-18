@@ -1,0 +1,146 @@
+<%-include('../layouts/header.ejs') %>
+      
+<section>
+  <br>
+    <div class="container" style="width: 50%;">
+      <h5 style="color: rgb(154, 8, 132)  ;text-align: center;">CREATE AN ACCOUNT</h5>
+      <br>
+    <form action="" method="post"  class="box" style="border: 2px solid #dbcdcd; padding: 30px; border-radius: 20px;box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);"  >
+      <div class="form-row">
+        
+        <div class="form-group col-md-12">
+          <label for="username">Username</label>
+          <input type="text" name="name" class="form-control" id="username" placeholder="Name" value="<%= nameValue %>"  required>
+        </div>
+        <br>
+        <div class="form-group col-md-12">
+          <label for="Email">Email</label>
+          <input type="email" name="email" class="form-control" id="Email" value="<%= emailValue %>" placeholder="email"  required>
+          <span id="emailError" style="color: red;" class="invalidAlert"></span>
+        </div>
+      </div>
+      <br>
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <button style="background-color: rgb(250, 191, 241)" id="clickButton" onclick="startCountdown()"  name="action" type="submit" value="genotp" class="btn btn-light">Generate OTP</button>
+          <span id="countdown"></span>
+        </div>
+        <small id="message" style="color: green;"></small>
+        <div class="form-group col-md-10" >
+          <% if(typeof message1 !=='undefined'){
+            %>
+            <p  style="color: rgb(8, 156, 23);">
+                <%= message1 %>
+            </p>
+            <%
+          }
+         %>
+        </div>
+      </div>
+      <br>
+      <div class="form-row">
+        
+        <div class="form-group col-md-12">
+          <label for="OTP">Enter OTP</label>
+          <input type="text" class="form-control" id="OTP" name="otp">
+        </div>
+      </div>
+     <br>      
+      <div class="form-group ">
+        <label for="password">Password</label>
+        
+        <input type="password" name="password" class="form-control" id="password2" placeholder="password" >
+        <span id="passwordError" style="color: red;" class="invalidAlert"></span>
+      </div>
+     <!-- <div class="form-group">
+        <label for="confirm_password">Confirm Password</label>
+        <input type="password" name="passwords" class="form-control" id="confirm_password" placeholder="password">
+      </div>  -->
+      <br>
+      <button  style="background-color: rgb(250, 191, 241)" name="action" type="submit" value="signin" class="btn btn-light" onclick="return validateForm()">Sign in</button>
+      <br>
+     <% if (typeof message !== 'undefined') { %>
+      <div class="alert alert-warning text-center" role="alert" id="invalidAlert" style="color: red;">
+        <strong><%= message %></strong>
+      </div>
+    <% } %>
+    
+   
+    </form>
+  </div>
+  </section>
+
+  <script>
+    
+
+     window.onclick = function(){
+    clearAlert()
+  }
+  async function clearAlert(){
+    const userAlert = await document.getElementById('invalidAlert')
+    if(userAlert){
+      userAlert.style.display = 'none'
+    }
+  }
+ // Set the initial countdown value
+function startCountdown() {
+  const emailInput = document.getElementById("Email");
+  const emailValue = emailInput.value;
+  console.log(emailValue)
+  //const name = document.getElementById("username");
+  const flag = 0
+ 
+
+  let countdownValue = 10;
+  let countdownInterval;
+  const clickButton = document.getElementById('clickButton');
+  clickButton.disabled = true;
+  
+  fetch(`/resend?emailid=${emailValue}&flag=${flag}`)
+
+  const message = document.getElementById('message');
+  message.textContent = "OTP send sucessfully"
+  countdownInterval = setInterval(() => {
+    const countdownElement = document.getElementById('countdown');
+    countdownElement.innerText = `Countdown: ${countdownValue} seconds`;
+
+    if (countdownValue === 0) {
+      clearInterval(countdownInterval);
+      clickButton.disabled = false;
+      clickButton.innerText = 'Resend OTP';
+      countdownElement.innerText = '';
+    }
+
+    countdownValue--;
+  }, 1000);
+}
+function validateForm() {
+  const email = document.getElementById('Email').value;
+  const password = document.getElementById('password2').value;
+  
+  // Email validation using regex
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const emailError = document.getElementById('emailError');
+  if (!email.match(emailRegex)) {
+    emailError.innerText = 'Please enter a valid email address.';
+    return false;
+  } else {
+    emailError.innerText = ''; // Clear previous error message
+  }
+  const passwordError = document.getElementById('passwordError');
+  // Password validation (at least 8 characters)
+  if (password.length < 8) {
+    passwordError.innerText = 'Password must be at least 8 characters long.';
+    return false;
+  }else {
+    passwordError.innerText = ''; // Clear previous error message
+  }
+
+  return true;
+}
+
+  </script>
+  
+  <%-include('../layouts/footer.ejs') %>
+
+  

@@ -1,0 +1,79 @@
+<%-include('../layouts/header.ejs') %>
+<style>
+  .wishlist-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  float: right;
+}
+
+.wishlist-button.active {
+  color: red;
+}
+</style>
+<br>
+<div class="container" id="top-cards">
+    <div class="row">
+        <% product.forEach(function(item) { %>
+        <div class="col-md-4 ">
+          <%  if (item.quantity === 0) { %>
+            <span class="badge rounded-pill bg-dark">OutStock</span>
+  
+            <% } else if (item.rounded_percentage !== "0% Offer") { %>
+          <span class="badge bg-danger" ><%= item.rounded_percentage %></span>
+          
+          <% } else { %>
+            <span class="badge bg-light" >  </span>
+          <% } %>
+          
+            <div class="card text-center mb-4" style="width: 18rem; justify-content: space-between; border-color: white; ">
+               <a href="/product_view?id=<%= item._id %>"> <img class="card-img-top" src="productimages/<%= item.images[0] %>" style="width: 160px; height: 150px; " alt="<%= item.images[0] %>" class="card-img-top" ></a>
+                
+               <div class="card-body  ">
+                  <h5 class="card-title"><%= item.name %></h5>
+                  <h5 class="card-text"><strong> Rs:<%= item.selling_price %></strong></h5>
+                  <h6 class="card-text"> MRP:<s style="text-decoration: line-through;  color: red;"><%= item.mrp %></s></h6> 
+                  <% if(item.quantity === 0){ %>
+                  <!-- <a href="/add-to-cart?id=<%= item._id %>"  class=" btn btn-white " id="add-to-cart-button"  style="background-color: rgb(247, 202, 250);" >Add to Cart</a>--> 
+                    <button class="btn btn-white" style="background-color: rgb(247, 202, 250);" disabled>Add to Cart</button>
+                    <% } else { %>
+                  <a href="/add-to-cart?id=<%= item._id %>"  class=" btn btn-white " id="add-to-cart-button"  style="background-color: rgb(247, 202, 250);">Add to Cart</a>
+                 <!--  ------------------------------------------>
+                 <% if (typeof wishlist !== 'null' && wishlist)  { %>
+                 <% var isWishlistItem = false; %>
+                <% wishlist.product_id.forEach(function(wishlistItem) { %>
+                <% if (wishlistItem.item.equals(item._id) && wishlistItem.wishflag === 1 ) { %>
+                <% isWishlistItem = true; %>
+
+                  <a href="/remove-from-wishlist?id=<%= item._id %>&categoryid=<%= categoryid %>"> <button class="wishlist-button active" onclick="toggleWishlist(this)">
+                    <i class="fas fa-heart"></i>
+                  </button></a>
+                  <% } %>
+                <% }); %>
+                <% if (!isWishlistItem) { %>
+                    <a href="/add-to-wishlist?id=<%= item._id %>&categoryid=<%= categoryid %>"> <button class="wishlist-button" onclick="toggleWishlist(this)">
+                      <i class="fas fa-heart"></i>
+                    </button></a>
+                    <% } %>
+                    <% } %>
+<!------------------------------------------------------------------>
+                  <% } %>
+                </div>
+              </div>
+        </div>
+        
+        <% }); %>
+     
+    </div>
+    
+    
+</div>
+
+<script>
+  function toggleWishlist(button) {
+  button.classList.toggle('active');
+}
+</script>
+
+<%-include('../layouts/footer.ejs') %>

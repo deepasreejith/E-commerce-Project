@@ -1,0 +1,50 @@
+<%-include('../layouts/admin_header.ejs') %>
+
+<div id="page-content-wrapper">
+
+<div class="container" style="width: 50%; height: 70%; margin-top: 150px;">
+    <form action="" method="post" >
+        
+        
+        <br>
+        <label for="combobox">Select categeory</label>
+        <select class="custom-select" id="combobox" name="combobox">
+          <option selected></option>
+            <% categories.forEach(function(category) { %>
+              <option value="<%= category._id %>" ><%= category.name %></option>
+            <% }); %>
+          </select>
+          <br>
+          <br>
+          <div class="form-group" >
+            <label for="discount">Discount</label>
+            <input type="text" name="discount" class="form-control" id="discount" required>
+           
+          </div>
+          <br>
+          <div class="form-group">
+            <label for="status">Category offer</label>
+            <select class="form-control " id="status" name="status">
+                <option selected>Choose...</option>
+                  <option value="1">Enable</option>
+                  <option value="0">Disable</option>
+                
+            </select>
+          </div>
+          <br>
+        <button class="btn btn-dark "  type="submit">Create offer</button>
+        <% if(typeof message !=='undefined'){
+          %>
+          <p style="color: rgb(8, 156, 23);">
+          <%= message %>
+          </p>
+          <%
+          }
+          %>
+      </form>
+    </div>
+
+
+  </div>
+</div>
+<%-include('../layouts/admin_footer.ejs') %>

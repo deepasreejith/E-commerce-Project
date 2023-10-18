@@ -1,0 +1,34 @@
+<h5 class="report-heading" ><strong> SALES RETURN REPORT</strong></h5>
+<hr>
+<table class="table">
+    <thead>
+      <tr>
+        <th><b>Date</b></th>
+        <th><b>Order ID</b></th>
+        <th><b>Products</b></th>
+        <th><b>Quantity</b></th>
+        <th><b>Price</b></th>
+        <th><b>Total</b></th>
+        <th><b>Total Amount</b></th>
+      </tr>
+    </thead>
+    <tbody>
+    <% returnOrder.forEach(function(order) { %>
+        <% order.orders.forEach(function(item, index) { %>
+          <tr >
+            <% if (index === 0) { %>
+              <td class="rowspan-td" rowspan="<%= order.productCount %>"><%= order._id.formattedDate %></td>
+              <td class="rowspan-td" rowspan="<%= order.productCount %>"><%= order._id.OrderID %></td>
+            <% } %>
+            <td><%= item.productName %></td>
+            <td><%= item.quantityOrdered %></td>
+            <td><%= item.mrp %></td>
+            <td ><%= item.total %></td>
+            <% if (index === 0) { %>
+              <td class="rowspan-td" rowspan="<%= order.productCount %>"><%= order.totalAmount %></td>
+              <% } %>
+            </tr>
+        <% }); %>
+      <% }); %>
+    </tbody>
+  </table>

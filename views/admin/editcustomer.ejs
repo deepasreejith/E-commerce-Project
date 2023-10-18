@@ -1,0 +1,40 @@
+<%-include('../layouts/admin_header.ejs') %>
+<h5 style="margin-left: 42rem;margin-top: 20px;"><strong>EDIT CUSTOMER</strong></h5>
+<hr>
+<div id="page-content-wrapper"style="margin-left: 200px;">
+
+    <div class="container" style="width: 60%; height: auto; margin-top: 80px;border: 2px solid #dbcdcd; padding: 20px;box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); ">
+    <form action="" method="post" >
+        <div class="form-group" >
+            <label for="customername">Customer Name</label>
+            <input type="text" name="name" class="form-control" value="<%= user.name %>" id="username" disabled>
+           
+          </div>
+          <br>
+          <div class="form-group" >
+            <label for="customeremail">Customer Emailid</label>
+            <input type="text" name="email" class="form-control" value="<%= user.email %>" id="customeremail" disabled>
+           
+          </div>
+          
+        <br>
+        <div class="form-group">
+            <label for="combobox">Status</label>
+        <select class="custom-select" id="combobox" name="combobox">
+          <option value="<%= user.status %>"><%= user.status %></option>
+          <option value="Blocked">Blocked</option> 
+          <option value="Active">Active</option>
+          </select>
+          </div>
+       <br>
+        <button class="btn btn-dark "  type="submit">Update</button>
+        <br>
+       
+      </form>
+    </div>
+
+
+  </div>
+</div>
+
+<%-include('../layouts/admin_footer.ejs') %>

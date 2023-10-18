@@ -1,0 +1,280 @@
+
+<%-include('../layouts/admin_header.ejs') %>
+
+<div class="" style=" margin-left: 270px; margin-top: 50px; margin-right: 30px;">
+   
+   <div class="row col-sm-12 ">
+      
+      <div class="col-sm-4  " >
+         
+         <div class="card " style="width: 18rem; height: 8rem; align-items: center;margin-bottom: 25px;background-color: rgb(222, 245, 199);border: none;">
+            <div class="card-body" style=" text-align: center;">
+              <h4>Total Sale</h4>
+              <h3><b><%= totalSale[0].totalSale %></b></h3>
+            </div>
+          </div>
+          <div class="card " style="width: 18rem;height: 8rem;align-items: center;margin-bottom: 25px;background-color: rgb(253, 225, 253);border: none;">
+            <div class="card-body"style=" text-align: center;" >
+              <h4>Total Order</h4>
+              <h3><b><%= totalCount %></b></h3>
+            </div>
+          </div>
+          <div class="card " style="width: 18rem;height: 8rem;align-items: center;margin-bottom: 25px;background-color: rgb(228, 224, 229);border: none;">
+            <div class="card-body" style=" text-align: center;">
+              <h4>Total Products</h4>
+              <h3><b><%= totalProduct %></b></h3>
+            </div>
+          </div>
+          
+      </div>
+      
+      <div class="col-sm-8  " style="background-color: white; border-radius: 20px;">
+        
+        <div class="row">
+          <div class="col-md-5">
+            <div class="form-group">
+              <label for="sdate">Start Date</label>
+              <div class="input-group date" id="datepicker">
+                <input type="text" class="form-control" id="sdate" value="" name="sdate" />
+                <div class="input-group-append" style="cursor: pointer;">
+                  <span class="input-group-text bg-light d-block">
+                    <i class="fa fa-calendar"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        
+          <div class="col-md-5">
+            <div class="form-group">
+              <label for="edate">End Date</label>
+              <div class="input-group date" id="datepicker2">
+                <input type="text" class="form-control" id="edate" value="" name="edate" />
+                <div class="input-group-append" style="cursor: pointer;">
+                  <span class="input-group-text bg-light d-block">
+                    <i class="fa fa-calendar"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-2">
+          <button type="button" onclick="submitDates()" class="btn btn-dark" style="margin-top: 25px;" value="submit">Submit</button>
+          </div>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="monthly"  onclick="showMonthlyChart()">
+          <label class="form-check-label" for="flexRadioDefault1" >
+            Monthly
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" value="yearly"onclick="showYearlyChart()" >
+          <label class="form-check-label" for="flexRadioDefault2">
+            Yearly
+          </label>
+        </div>
+          
+         <canvas id="salesChart" width="400" height="200" ></canvas>
+         
+        
+    </div>
+  </div>
+  <br>
+    <div class="row">
+      <div class="col-sm" >
+        <h5><b><i>Last five order</b></i></h5>
+        <table class="table table-warning table-striped" style="margin-left: 0; width: 100%;
+        margin-top: 20px;">
+          <thead>
+            
+            <tr>
+              <th scope="col"><b>S.NO</b></th>
+              <th scope="col"><b>Order ID</b></th>
+              <th scope="col"><b>Customer Name</b></th>
+              <th scope="col"><b>Amount</b></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% orders.forEach(function(item, index) { %>
+            <tr>
+              <th scope="row"><%= index + 1 %></th>
+              <td><%= item.OrderID %></td>
+              <td><%= item.name %></td>
+              <td><%= item.subtotal %></td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col-sm" >
+        <div class="col-sm" >
+          <h5><b><i>Top five customers</b></i></h5>
+          <table class="table table-warning table-striped" style="margin-left: 0; margin-top: 20px;">
+            <thead>
+              
+              <tr>
+                <th scope="col"><b>S.NO</b></th>
+                <th scope="col"><b>Customer Name</b></th>
+                <th scope="col"><b>Amount</b></th>
+              </tr>
+            </thead>
+            <tbody >
+              <% topCustomers.forEach(function(item, index) { %>
+              <tr>
+                <th scope="row"><%= index + 1 %></th>
+                <td><%= item.userName %></td>
+                <td><%= item.totalOrderAmount %></td>
+              </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+    </div>
+
+
+
+
+   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+   <script>
+    const salesChartCanvas = document.getElementById('salesChart');
+//radio button actions
+function showYearlyChart(){
+  const startDate = '01/01/2019'; // Define the start date for monthly data
+  const endDate = '12/31/2023';   // Define the end date for monthly data
+  const data = {
+      startDate: startDate,
+      endDate: endDate
+    };
+    fetch('/admin/dashboard_radio2', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => { 
+      console.log('Response from controller:', data.labels);
+      
+      console.log('Response from controller:', data.salesData); 
+      loadpage(data.labels,data.salesData,salesChartCanvas);
+    })
+    .catch(error => console.error('Error:', error));
+
+}
+
+function showMonthlyChart() {
+  
+  const startDate = '01/01/2023'; // Define the start date for monthly data
+  const endDate = '12/31/2023';   // Define the end date for monthly data
+  const data = {
+      startDate: startDate,
+      endDate: endDate
+    };
+    fetch('/admin/dashboard_radio1', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => { 
+      console.log('Response from controller:', data.labels);
+      
+      console.log('Response from controller:', data.salesData); 
+      loadpage(data.labels,data.salesData,salesChartCanvas);
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+
+//submit button actions
+    function submitDates() {
+      const startDate = document.getElementById('sdate').value;
+      const endDate = document.getElementById('edate').value;
+      
+      const data = {
+      startDate: startDate,
+      endDate: endDate
+    };
+    fetch('/admin/home', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => { 
+      console.log('Response from controller:', data);
+      
+      loadpage(data.labels,data.salesData,salesChartCanvas);
+    })
+    .catch(error => console.error('Error:', error));
+  }
+ 
+
+    //loading home graph design 
+    window.onload = function() {
+      const labels = JSON.parse('<%- JSON.stringify(labels) %>');  // Parse JSON string to JavaScript array
+      const salesDatas = JSON.parse('<%= JSON.stringify(salesData) %>');
+      
+      loadpage(labels,salesDatas, salesChartCanvas);
+    }
+
+    let salesChart;
+    function loadpage(labels,salesDatas,canvasId){
+      if (salesChart) {
+      salesChart.destroy();
+    }
+    console.log("salechart"+salesChart)
+    console.log("sub", labels);
+    console.log("salesData", salesDatas);
+      
+      const salesData = {
+          labels:labels,
+          datasets: [{
+              label: 'Total Sales',
+              data: salesDatas, // Replace with your actual sales data per day
+              backgroundColor: 'rgba(54, 162, 235, 0.6)',
+              borderColor: 'rgba(54, 162, 235, 1)',
+              borderWidth: 1
+          }]
+      };
+  
+      // Get the canvas element
+      //const salesChartCanvas = document.getElementById('salesChart');
+      
+      // Create a new Chart using the canvas
+       salesChart = new Chart(canvasId, {
+          type: 'bar',
+          data: salesData,
+          options: {
+              scales: {
+                x: {
+              title: {
+              display: true,
+              text: ''
+                  }
+              },
+                  y: {
+                      beginAtZero: true,
+                      title: {
+                      display: true,
+                      text: 'Sale Price'
+                      }
+                  },
+                  
+                  
+              }
+          }
+      });
+    }
+  </script>
+
+   <%-include('../layouts/admin_footer.ejs') %>

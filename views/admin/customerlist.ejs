@@ -1,0 +1,53 @@
+<%-include('../layouts/admin_header.ejs') %>
+<h5 style="margin-left: 42rem;margin-top: 20px;"><strong>CUSTOMERS</strong></h5>
+<hr>
+<div id="page-content-wrapper" style="margin-left: 10px;margin-top: 20px; width: 70%; ">
+<div class="container" >
+    <table class="table table-striped" style="margin-left: 350px; width: 870px;margin-top: 50px;">
+        <thead>
+          <tr>
+            <th scope="col"><strong>Name</strong></th>
+            <th scope="col"><strong>Email</strong></th>
+            <th scope="col"><strong>Status</strong></th>
+            <th scope="col"><strong>Actions</strong></th>
+          </tr>
+        </thead>
+        <tbody>
+            <% user.forEach(function(item) { %>
+                <tr>
+                  <td><%= item.name %></td>
+                  <td><%= item.email %></td>
+                  <td><%= item.status %></td>
+                  <td><a href="/admin/editcustomer?id=<%= item._id %>" type="button" class="btn btn-success btn-sm">Edit </a>
+                  <!--  <a href="/admin/deletecategory?id=<%= item._id %>" type="button" class="btn btn-danger btn-sm">Delete</a>  -->
+                  <button class="btn btn-danger btn-sm deleteButton" data-customer-id="<%= item._id %>">Delete </button>
+    
+                </td>
+                </tr>
+              <% }); %>
+        </tbody>
+      </table>
+    </div>
+
+</div>
+</div>
+</div>
+<script>
+  document.querySelectorAll('.deleteButton').forEach(function(button) {
+      button.addEventListener('click', function () {
+          // Get the category ID from the data attribute
+          const customerId = this.getAttribute('data-customer-id');
+          
+          // Display a confirmation dialog
+          const result = confirm(`Are you sure want to delete ?`);
+
+          // If the user clicks "Yes," proceed to the delete action
+          if (result === true) {
+              // Redirect to the delete route with the category ID
+              window.location.href = `/admin/deletecustomer?id=${customerId}`;
+          }
+      });
+  });
+</script>
+
+<%-include('../layouts/admin_footer.ejs') %>

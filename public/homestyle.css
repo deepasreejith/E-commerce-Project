@@ -1,0 +1,77 @@
+*{
+    margin: 0;
+   padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    background-color: bisque;
+}
+.carousel-itemv{
+    height: 100vh;
+    min-height: 300px;
+    background: no-repeat scroll center scroll;
+    -webkit-background-size:cover;
+    background-size: cover;
+}
+
+.carousel-item::before{
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: rgb(35, 27, 27);
+    opacity: 0.4;
+}
+.carousel-caption{
+    bottom: 188px;
+    padding-left: 100px;
+    padding-right: 100px;
+}
+.carousel-caption h5{
+    font-size: 100px;
+    font-weight: 600;
+}
+.carousel-caption p{
+    font-size: 18px;
+    top: 2rem;
+}
+.btn1{
+    background-color: rgb(226, 101, 185);
+    color: white;
+    border-radius: 0;
+    padding: 1.5rem 2rem;
+    font-size: 1rem;
+    margin-right: 15px;
+    
+}
+
+/*.pagiation{
+    display: flex;
+    
+    align-items: center;
+    background-color:rgb(103, 43, 53);
+    color: black;
+    padding: 10px 40px;
+    border-radius: 2px;
+    
+}
+.ul{
+    margin: 10px 30px;
+}
+.ul li{
+    display: inline-block;
+    margin: 0 10px;
+    background: #11b83b;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 45px;
+    cursor: pointer;
+}*/

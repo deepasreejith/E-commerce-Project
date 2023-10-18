@@ -1,0 +1,68 @@
+<%-include('../layouts/header.ejs') %>
+<div class="container">
+<section class="sproduct my-2 pt-3 mx-4 " >
+    <div class="row mt-3 mx-5" style=" padding: 15px; background-color: rgb(248, 242, 248);">
+        <div class="col-lg-5  " >
+            <div class="col-md-6 ">
+                <%  if (product[0].quantity === 0) { %>
+                    <span class="badge rounded-pill bg-dark">OutStock</span>
+                    <% } else if (product[0].rounded_percentage !== "0% Offer") { %>
+                  <span class="badge bg-danger" ><%= product[0].rounded_percentage %></span>
+                  <% } else { %>
+                    <span class="badge bg-light" >  </span>
+                  <% } %>
+                </div>
+                <div class="inner">
+                <img class="img-fluid w-100 pb-1" id="mainimage" src="productimages/<%= product[0].images[0] %>">
+                </div>
+            <div class="small-img-group" >
+                <div class="small-img-col">
+                    <img src="productimages/<%= product[0].images[0] %>"  width="100%" class="small-img" alt="" >
+                </div>
+                <div class="small-img-col" >
+                    <img src="productimages/<%= product[0].images[1] %>" width="100%" class="small-img" alt="">
+                </div>
+                <div class="small-img-col" >
+                    <img src="productimages/<%= product[0].images[2] %>" width="100%" class="small-img" alt="">
+                </div>
+                
+            </div>
+        </div>
+        <div class="col-lg-5  mx-5 " >
+            <h4><%= product[0].name %></h4>
+            <h3><strong>Rs:<%= product[0].selling_price %></strong> </h3>
+            <h5>M.R.P:<s style="text-decoration: line-through;  color: red;"><%= product[0].mrp %></s></h5>
+            <hr>
+            <p><strong>About this item:</strong></p>
+            <h6><%= product[0].description %></h6>
+            <br>
+            
+            <div style="margin-bottom: auto;">
+                <% if(product[0].quantity === 0){ %>
+                    <button class="btn btn-white" style="background-color: rgb(250, 191, 241);font-size: large" disabled>Add to Cart</button>
+                    <% } else { %>      
+                    <a href="/add-to-cart?id=<%= product[0]._id %>&data=<%= wishdata %> " class="btn btn-white" style="background-color: rgb(250, 191, 241);font-size: large">Add to cart</a>
+                    <% } %>   
+                <% if (wishflag == 1) { %>
+            <a href="/remove-from-wishlist?id=<%= product[0]._id %>&data=<%= wishdata %>" class="btn btn-white" style="background-color:  rgb(250, 191, 241);float: right;font-size: large">Remove from Wishlist</a>
+                 <% } else { %>
+            <a href="/add-to-wishlist?id=<%= product[0]._id %>" class="btn btn-white" style="background-color:   rgb(250, 191, 241);float: right;font-size: large">Add to Wishlist</a>
+                <% } %>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+</div>
+<script>
+    var mainImage  = document.getElementById('mainimage');
+    var smallImages  = document.getElementsByClassName('small-img');
+   
+    for (var i = 0; i < smallImages.length; i++) {
+        smallImages[i].onclick = function() {
+            mainImage.src = this.src;
+        };
+    }
+</script>
+<%-include('../layouts/footer.ejs') %>

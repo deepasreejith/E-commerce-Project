@@ -1,0 +1,84 @@
+<%-include('../layouts/admin_header.ejs') %>
+<h5 style="margin-left: 42rem;margin-top: 20px;"><strong>ADD COUPON</strong></h5>
+<hr>
+<div id="page-content-wrapper" style="margin-left: 200px; ">
+
+<div class="container" style="padding-left: 50px; padding-top: 50px;">
+    <form action="" method="post"   >
+      
+    <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="name">Coupon Name</label>
+            <input type="text" class="form-control" name="name" id="field1" >
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="code">Coupon Code</label>
+            <input type="text" class="form-control" name="code" id="field2" >
+          </div>
+        </div>
+      </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+              <label for="sdate">Start Date</label>
+          
+              <div class="input-group date" id="datepicker">
+                <input type="text" class="form-control" id="sdate" name="sdate" />
+                <div class="input-group-append" style="cursor: pointer;">
+                  <span class="input-group-text bg-light d-block">
+                    <i class="fa fa-calendar"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="edate">Expire Date</label>
+            
+                <div class="input-group date" id="datepicker2">
+                  <input type="text" class="form-control" id="edate" name="edate" />
+                  <div class="input-group-append" style="cursor: pointer;">
+                    <span class="input-group-text bg-light d-block">
+                      <i class="fa fa-calendar"></i>
+                    </span>
+                  </div>
+                </div>
+              </div>
+        </div>
+      </div>
+
+      
+      <br>
+  
+    <div class="form-group col-md-6">
+        <div class="form-group">
+            <label for="discount">Discount</label>
+            <input type="text" class="form-control" name="discount" id="field5" >
+            
+          </div>
+    </div>
+   
+    <br>
+    <button type="submit" class="btn btn-dark " >Create</button>
+    <% if(typeof message !=='undefined'){
+        %>
+        <p style="color: rgb(8, 156, 23);">
+        <%= message %>
+        </p>
+        <%
+        }
+        %>
+</form>
+</div>
+
+
+</div>
+</div>
+
+
+
+<%-include('../layouts/admin_footer.ejs') %>

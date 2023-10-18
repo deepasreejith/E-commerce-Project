@@ -1,0 +1,344 @@
+<%-include('../layouts/header.ejs') %>
+
+<div class="small-container cart-page" style="display: flex;">
+    <table style="background-color: white;  " >
+        <tr>
+            <th>PRODUCT</th>
+            <th style="padding-left: 100px;">QUANTITY</th>
+            <th>SUBTOTAL</th>
+        </tr>
+        <% let overallTotal = 0; %>
+        <% cartitems.forEach(function(item) { %>
+          <% let subtotal = item.quantity * item.productDetails.selling_price; %>
+            <% overallTotal += subtotal; %>
+        <tr>
+            <td>
+             
+              <div class="cart-info">
+                <img src="productimages/<%= item.productDetails.images[0] %>"  width="60px" height="50px">
+                <div>
+                  <p><strong><%= item.productDetails.name %></strong></p>
+                  <small>Rs:<%= item.productDetails.selling_price %></small>
+                  
+                  <br>
+                  <a href="/productremove?cartid=<%= item._id%>&productid=<%= item.item %>">Remove</a>
+                </div>
+              </div>
+              
+            </td>
+            <td style="padding-left: 100px;">
+              <button class="cart-item-count " id="minusButtonForProduct<%= item.item %>" onclick="minusbutton('<%= item._id%>','<%= item.item %>','<%= item.productDetails.selling_price %>')" <%= item.quantity === 1 ? 'disabled' : '' %> >-</button>&nbsp; 
+              <span id="quantityForProduct<%= item.item %>"><%= item.quantity %></span>&nbsp;
+              
+              <% if (item.Lflag === 1) { %>
+                <button class="cart-item-count   " id="plusbutton<%= item.item %>" onclick="plusbutton('<%= item._id%>','<%= item.item %>','<%= item.productDetails.selling_price %>')" disabled>+</button>
+                <span  id="quantity_check<%= item.item %>" style="color: red;"> Limit exceeded </span>
+                
+              <% } else if ( item.Qflag  === 1) { %>
+                <button class="cart-item-count   " id="plusbutton<%= item.item %>" onclick="plusbutton('<%= item._id%>','<%= item.item %>','<%= item.productDetails.selling_price %>')" disabled>+</button>
+                <span  id="quantity_check<%= item.item %>" style="color: red;"> Out of stock </span>
+                
+              <% } else { %>
+                <button class="cart-item-count   " id="plusbutton<%= item.item %>" onclick="plusbutton('<%= item._id%>','<%= item.item %>','<%= item.productDetails.selling_price %>')" >+</button>
+                <span  id="quantity_check<%= item.item %>" style="color: red;"> </span>
+              <% } %>
+              
+
+            </td>
+            
+            <td id="subtotal<%= item.item %>"> <%= subtotal %></td>
+
+        </tr>
+        <% }); %>
+
+    </table>
+
+<div class="total-price" >
+  
+  <table  style="border: 2px solid #dbcdcd; padding: 20px; box-shadow: 2px 2px 5px rgba(59, 59, 59, 0.3);  background-color: white;" >
+   
+    <tr>
+      <td><strong>TOTAL</strong></td>
+      <td id="total"><strong> <%= overallTotal %> </strong> </td>
+    </tr>
+    
+    <tr>
+      <td><div class="input-group ">
+        <input type="text" class="form-control " name="coupon" placeholder="Coupon Code" aria-label="Coupon Code" aria-describedby="basic-addon2">
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" type="button" onclick= "coupon()">Apply</button>
+        </div>
+      </div></td>
+      
+    </tr>
+    <tr><td> <span id="message" style="color: red;"></span></td></tr>
+    <tr  style="color: green;">
+      <td><strong>Discount Amount</strong></td>
+      <td id="save"><strong>0</srtong></td>
+    </tr>
+    <tr>
+      <td><strong>SUBTOTAL</strong></td>
+      <td id="final"><strong><%= overallTotal %></strong> </td>
+      </tr>
+      
+  </table>
+  <div class="m-3 " style=" text-align: center;max-width: 350px; padding-left: 110px;">
+    <a href="#" onclick="placeOrder()" id="placeorder" class=" btn btn-light" style=" background-color: rgb(250, 191, 241); width: 300px; height: 40px; border-radius: 50px; font-size: large;" >Place Order</a>
+      <% if(typeof message !=='undefined'){
+      %>
+      <p style="color: red">
+      <strong>  <%= message %> </strong>
+      </p>
+      <%
+      }
+      %>
+  </div>
+</div> 
+
+ 
+</div>
+
+<script>
+ 
+ function plusbutton(cartid,productid,mrp){
+ console.log("mrp:"+mrp)
+ let newmrp = parseFloat(mrp)
+  const minusButton = document.getElementById('minusButtonForProduct' + productid);
+  const quantityElement = document.getElementById('quantityForProduct' + productid);
+    minusButton.disabled = false;
+  console.log("span value  ;"+quantityElement.innerText)
+  const currentQuantity = quantityElement.innerText
+  const url = '/plusbuttoninc';  // Replace with your API endpoint
+
+const data = {
+  cartid: cartid,
+  productid: productid,
+  currentQuantity : currentQuantity
+};
+
+const options = {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'  // Specify the content type as JSON
+  },
+  body: JSON.stringify(data)  // Convert JavaScript object to JSON string
+};
+
+fetch(url, options)
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();  // Parse the JSON from the response
+  })
+  .then(data =>{
+    console.log('Success:', data)
+    const plusButton = document.getElementById('plusbutton' + productid);
+    if(data.limit){
+      
+        plusButton.disabled = true;
+        const limitResponse = document.getElementById('quantity_check' + productid);
+        limitResponse.innerText = data.limit;
+
+         fetch('/updatelimit', {
+          method: 'POST',
+          headers: {
+          'Content-Type': 'application/json'  
+           },
+      body: JSON.stringify({ id: productid ,cartid: cartid})
+
+      })
+
+    }else if(data.stock){
+      plusButton.disabled = true;
+      const outStock = document.getElementById('quantity_check' + productid);
+      outStock.innerText = data.stock;
+      fetch('/updatequantity', {
+          method: 'POST',
+          headers: {
+          'Content-Type': 'application/json'  
+           },
+      body: JSON.stringify({ id: productid ,cartid: cartid})
+
+      })
+
+    }else{
+
+  const updatedQuantity = data.quantity;
+ 
+  console.log('Quantity from server:', updatedQuantity);
+ const totalprice = updatedQuantity * newmrp
+ 
+  const subtotalElement = document.getElementById('subtotal' + productid) 
+  const totalElement = document.getElementById('total') 
+  const couponCode = document.querySelector('input[name="coupon"]').value;
+    if (quantityElement) {
+        quantityElement.innerText = updatedQuantity;
+        subtotalElement.innerText = totalprice;
+        let currentTotal = parseFloat(totalElement.innerText);
+        console.log("currentTotal"+currentTotal)
+         const newTotal = currentTotal + newmrp;
+         console.log("newTotal"+newTotal)
+        totalElement.innerText =`${newTotal}`
+        if(couponCode){
+           coupon()
+          }else{
+            const final = document.getElementById('final');
+            final.innerText =`${newTotal}`
+        }
+      }
+   
+    }
+  } )
+  .catch(error => console.error('Error:', error));
+
+  }
+
+  
+
+  function minusbutton(cartid,productid,mrp){
+    console.log("line 169")
+    const plusButton = document.getElementById('plusbutton' + productid);
+    plusButton.disabled = false
+    const limitResponse = document.getElementById('quantity_check' + productid);
+       limitResponse.innerText = '';
+       console.log("line 174")  
+    let newmrp = parseFloat(mrp)
+    const quantityElement = document.getElementById('quantityForProduct' + productid);
+    const currentQuantity = parseInt(quantityElement.innerText);
+    const couponCode = document.querySelector('input[name="coupon"]').value;
+  const minusButton = document.getElementById('minusButtonForProduct' + productid);
+  console.log("line 180")
+  
+  const url = '/minusbuttondec';  // Replace with your API endpoint
+
+const data = {
+  cartid: cartid,
+  productid: productid,
+  currentQuantity:currentQuantity
+};
+console.log("line 189")
+const options = {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'  // Specify the content type as JSON
+  },
+  body: JSON.stringify(data)  // Convert JavaScript object to JSON string
+};
+console.log("line 197")
+fetch(url, options)
+
+  .then(response => 
+  {
+    console.log("line 201")
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    console.log("line 205")
+    return response.json();  // Parse the JSON from the response
+  })
+  .then(data =>{
+    
+    console.log("line 207")
+  const updatedQuantity = data.quantity;
+  console.log('Quantity from server:', updatedQuantity);
+  
+    
+  const quantityElement = document.getElementById('quantityForProduct' + productid);
+  const totalprice = updatedQuantity * newmrp;
+  const subtotalElement = document.getElementById('subtotal' + productid) 
+  const totalElement = document.getElementById('total')
+  console.log("line 216") 
+      if (quantityElement) {
+      //  minusButton.disabled = false;
+      if(updatedQuantity === 1){    //disabled minus button when quantity 1
+         minusButton.disabled = true;
+      }
+        quantityElement.innerText = updatedQuantity;
+        subtotalElement.innerText = totalprice;
+        let currentTotal = parseFloat(totalElement.innerText);
+        console.log("line 225")
+         const newTotal = currentTotal - newmrp;
+         
+        totalElement.innerText =`${newTotal}`
+        console.log("line 229")
+        if(couponCode){
+           coupon()
+          }else{
+            const final = document.getElementById('final');
+            final.innerText =`${newTotal}`
+        }
+      }
+    
+     
+  } )
+  .catch(error => console.error('Error:', error));
+  }
+  // }
+  
+  let final = document.getElementById('final');
+ let couponDiscount = 0;
+ 
+  function coupon(){
+    const message = document.getElementById('message');
+     message.innerText = '';
+    const totalElement = document.getElementById('total').innerText;
+    const couponCode = document.querySelector('input[name="coupon"]').value;
+    console.log('Coupon Code:', couponCode);
+    
+    console.log("totalElement"+totalElement)
+    if (couponCode) {
+      fetch('/checkcoupon', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({code: couponCode,total:totalElement })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+     
+      return response.json();
+    })
+    .then(data => {
+      if(data.message){
+       
+        message.innerText = data.message
+      }else if(data.message1){
+        
+        message.innerText = data.message1
+      }
+      else{
+      console.log('Server response:', data.subtotal);
+       couponDiscount =  data.c_discount
+       const save = document.getElementById('save')
+       save.innerText = data.saveAmount;
+       const final = document.getElementById('final')
+       final.innerText =data.subtotal;
+      const placeOrder = document.getElementById('placeorder');
+      message.innerText = '';
+      }
+
+    })
+    .catch(error => console.error('Error:', error));
+
+    }
+  }
+  
+  function placeOrder(){
+    const totalElement = document.getElementById('total').innerText;
+    const couponCode = document.querySelector('input[name="coupon"]').value;
+    const saveAmount = document.getElementById('save').innerText
+       
+    
+       const url = `/address?total=${totalElement}&subtotal=${final.innerText}&discount=${couponDiscount}&code=${couponCode}&discountAmount=${saveAmount}`;
+
+      window.location.href = url;
+      }
+
+
+</script>
+
+<%-include('../layouts/footer.ejs') %>

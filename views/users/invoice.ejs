@@ -1,0 +1,53 @@
+<div class="invoice-header">
+    <div class="col-md-9">
+        <h1>INVOICE</h1>
+    </div>
+    <div class="col-md-3" >
+        <h3><strong</strong> Beauty Bonanza</h3>
+        <p>Beauty Bonanza private limited,Stadium complex</p>
+    </div>
+    
+</div>
+<div class="invoice-address">
+    <h3><strong</strong>Shipping Details</h3>
+    <p><%= orderDetail[0].address.name %></p>
+    <p><%= orderDetail[0].address.address %></p>
+    <p>PIN: <%= orderDetail[0].address.pin %></p>
+    <p>Mobile: <%= orderDetail[0].address.mobile %></p>
+</div>
+
+<div class="invoice-details">
+    <p><strong>Order ID:</strong> <%= orderDetail[0].OrderID %></p>
+    <p><strong>Invoice Date:</strong> <%= formattedInvoiceDate %></p>
+</div>
+
+
+
+<div class="invoice-products">
+    <table class="invoice-table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Dynamically generate rows for each product -->
+            <% orderDetail.forEach(function(item) { %>
+                <tr>
+                    <td><%= item.productDetails.name %></td>
+                    <td><%= item.quantity %></td>
+                    <td>Rs  <%= item.quantity * item.productDetails.selling_price %></td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</div>
+
+<div class="invoice-total">
+    <p><strong>Total:</strong> Rs  <%= orderDetail[0].total %></p>
+    <p><strong>Discount:</strong> Rs  <%= orderDetail[0].discountAmount %></p>
+    <p><strong>Subtotal:</strong> Rs  <%= orderDetail[0].subtotal %></p>
+</div>
+

@@ -1,0 +1,44 @@
+<%-include('../layouts/admin_header.ejs') %>
+<h5 style="margin-left: 42rem;margin-top: 20px;"><strong>COUPONS</strong></h5>
+  <hr>
+<div id="page-content-wrapper" style="margin-left: 10px;margin-top: 20px; width: 70%; ">
+  
+<div class="container"  >
+    <a style="margin-left: 1030px; " href="/admin/addcoupon"><button type="button" class="btn btn-dark " >Add Coupon</button></a>
+   
+    <table class="table table-striped" style="margin-left: 350px; width: 800px; margin-top: 20px;">
+        <thead>
+          <tr>
+            <th scope="col"><strong>Coupon Name</strong></th>
+            <th scope="col"><strong>Couon code</strong></th>
+            <th scope="col"><strong>Start Date</strong></th>
+            <th scope="col"><strong>Expire Date</strong></th>
+            <th scope="col" ><strong>Discount</strong></th>
+            <th scope="col" ><strong>Action</strong></th>
+          </tr>
+        </thead>
+        <tbody>
+            <% coupon.forEach(function(item) { %>
+                <tr>
+                  <td><%= item.name %></td>
+                  <td><%= item.code %></td>
+                  <td><%= moment(item.startdate).format('YYYY-MM-DD ') %></td>
+                  <td><%= moment(item.expiredate).format('YYYY-MM-DD ') %></td>
+                  <td><%= item.discount %></td>
+                  
+                  <td><a href="/admin/editcoupon?id=<%= item._id %>" type="button" class="btn btn-success btn-sm">Edit </a>
+                    <a href="/admin/deletecoupon?id=<%= item._id %>" type="button" class="btn btn-danger btn-sm">Delete </a>
+                
+                </td>
+                </tr>
+              <% }); %>
+        </tbody>
+      </table>
+    </div>
+
+</div>
+</div>
+</div>
+
+
+<%-include('../layouts/admin_footer.ejs') %>

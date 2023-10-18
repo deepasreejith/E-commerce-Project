@@ -1,0 +1,213 @@
+<%-include('../layouts/header.ejs') %>
+
+<div class="small-container cart-page " style=" padding-bottom: 100px; margin-top: 25px;">
+  <div style="display: flex;  margin-left: 100px; width: 55%; justify-content: space-between;">
+    <h5 style=" color: #b30b83;  ">Order Id :  <%= orderDetail[0].OrderID %> </h5>
+    <div style= " color: rgb(179, 11, 131);">
+    <% if ( orderDetail[0].order_status == 1) { %>
+      <h5 >Completed</h5>
+      <% } else if ( orderDetail[0].order_status == 2 ) { %>
+       <h5>Canelled</h5>
+       <% } else if ( orderDetail[0].order_status == 3 ) { %>
+         <h5>Delivered</h5>
+       <% } else if ( orderDetail[0].order_status == 4 ) { %>
+           <h5>Returned</h5>
+       <% } else if ( orderDetail[0].order_status == 5 ) { %>
+       <h5>Processing</h5>
+       <% } else if ( orderDetail[0].order_status == 6 ) { %>
+        <h5>Rejected</h5>
+        <% } else if ( orderDetail[0].order_status == 7 ) { %>
+          <h5>Delivered with Returned</h5>
+       <% } %>
+      </div>
+      
+  </div>
+  
+    <div style="display: flex;">
+      <table style=" border-collapse: collapse;margin-bottom: 500px; background-color: white;">
+        <tr>
+           
+            <th><strong> Product</strong></th>
+            <th><strong>Quantity</strong></th>
+            <th><strong>Subtotal</strong></th>
+            <% if ( orderDetail[0].order_status == 3 || orderDetail[0].order_status === 7) { %>
+            <th></th>
+            <% } %>
+        </tr>
+        <% let overallTotal = 0; %>
+        <% orderDetail.forEach(function(item) { %>
+          <% let subtotal = item.quantity * item.productDetails.selling_price; %>
+            <% overallTotal += subtotal; %>
+        <tr>
+            <td>
+             
+              <div class="cart-info">
+                <img src="productimages/<%= item.productDetails.images[0] %>"  width="60px" height="50px">
+                <div>
+                  <p><strong><%= item.productDetails.name %></strong></p>
+                  <small>Rs:<%= item.productDetails.selling_price %></small>
+                  
+                </div>
+              </div>
+              
+            </td>
+            <td><%= item.quantity %></td>
+            <td id="subtotal<%= item.item %>"><%= subtotal %></td>
+            <% if (orderDetail[0].order_status === 3 || orderDetail[0].order_status === 7) { %>
+              <% if (item.return_status === 1) { %>
+                <td style="color: red;">Item Returned</td>
+              <% } else { %>  
+            <td><a href="#" class="returnLink" onclick="returnOrder('<%= item.item %>', '<%= item.quantity %>','<%= item._id %>','<%= expireDate %>','<%= currentDate %>')">Return</a></td>
+            <% } %>
+            <% } %>
+        </tr>
+        <% }); %>
+    </table>
+    <div class="rightportion" style="display: block;">
+
+      <div class="total-price" style=" margin-left: 100px;border: 2px solid #dbcdcd; padding: 20px; border-radius: 20px;box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); height:300px ; line-height: 2px;background-color: white;">
+        <h5><strong>Payment Details</strong></h5>
+          <table style="margin-left: 10px; width: 300px; height:220px ;background-color: rgb(241, 241, 226); border-radius: 25px ;">
+         
+          <tr>
+            <td><strong>Total</strong></td>
+            <td id="total">Rs: <%= orderDetail[0].total %></td>
+          </tr>
+          <tr>
+            <td><strong>Coupon Code</strong></td>
+            <td id="code"><%= orderDetail[0].couponcode %></td>
+          </tr>
+          <tr>
+            <tr>
+              <td><strong>Discount Amount</strong></td>
+              <td id="save">Rs: <%= orderDetail[0].discountAmount %> </td>
+            </tr>
+            <tr>
+              
+            <td><strong>Subtotal</strong></td>
+            <td id="subtotal">Rs: <%= orderDetail[0].subtotal %></td>
+          </tr>
+        </table> 
+        </div>
+        <% if ( orderDetail[0].payment === '4' ) { %>
+        <div class="address col-md-4" style="margin-left:100px; margin-top: 25px; border: 2px solid #dbcdcd; padding: 20px; border-radius: 20px;box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); height:180px ; width: 365px;background-color: white; ">
+          <h5><strong>Transaction Details</strong></h5>
+            <table  style="margin-left: 10px; width: 300px; height:100px ;background-color: rgb(236, 240, 219); border-radius: 25px ; ">
+             
+                <tr>
+                  <td><strong>wallet Amount</strong></td>
+                  <td >Rs: <%= orderDetail[0].walletAmount %></td>
+                </tr>
+                <tr>
+                  <td><strong>netbanking Amount</strong></td>
+                  <td >Rs: <%= orderDetail[0].netbankingAmount %></td>
+                </tr>
+                
+            </table>
+            
+        </div>
+        <% } %>
+
+        <div class="address col-md-4" style="margin-left:100px; margin-top: 25px; border: 2px solid #dbcdcd; padding: 20px; border-radius: 20px;box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); height:300px ; width: 365px;background-color: white; " >
+          <h5><strong>Address Details</strong></h5>
+          <div class="card" style="width: 20rem; height: 13rem; background-color: rgb(236, 240, 219);border-radius: 25px; border-color: white;">
+              <div class="card-body">
+                
+                <p class="card-text"><%=orderDetail[0].address.name %> </p>
+                <p class="card-text"><%=orderDetail[0].address.address %></p>
+                <p class="card-text">PIN: <%=orderDetail[0].address.pin %></p>
+                <p class="card-text">Mobile: <%=orderDetail[0].address.mobile %></p>
+              </div>
+            </div>
+          </div>
+
+    </div>
+
+</div>
+
+</div>
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+   function returnOrder(itemId,quantity,orderId,expireDate,currentDate) {
+   
+    if(currentDate > expireDate){
+      swal({
+    icon: 'error',
+    title: 'Return Date Expired',
+    text: `The return date has passed..You can't return this item`,
+  });
+    }else{
+    swal({
+        text: 'Select a reason for return:',
+        content: {
+            element: 'div',
+            attributes: {
+                innerHTML: `
+                    <div class="return-reason">
+                        <input type="radio" name="returnReason" value="1"> Damaged<br>
+                        <input type="radio" name="returnReason" value="2"> Wrong item<br>
+                        <input type="radio" name="returnReason" value="3"> Changed mind<br>
+                    </div>
+                `
+            },
+        },
+        buttons: {
+            confirm: {
+                text: 'Submit',
+                closeModal: false,
+            },
+        },
+    }).then((value) => {
+        const returnReason = document.querySelector('input[name="returnReason"]:checked');
+        if (returnReason) {
+            const reason = returnReason.value;
+            console.log("id"+itemId)
+            // Call the return order function with itemId and selected reason
+            submitReturnOrder(itemId,quantity,reason,orderId);
+            swal('Return Reason Selected', '', 'success');
+        } else {
+            swal('Please select a reason for return', '', 'error');
+        }
+    });
+  }
+}
+function submitReturnOrder(itemId,quantity,reason,orderId) {
+    // Here you can submit the return order with the itemId and reason
+    console.log('Submitting return order for item:', itemId, 'with reason:', reason);
+    const url = '/returnorder';
+    const data = {
+        itemId: itemId,
+        quantity:quantity,
+        reason: reason,
+        orderId:orderId
+    };
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(updatedData => {
+        console.log('Return order submitted successfully. Updated data:', updatedData);
+        // Update the DOM or trigger a page reload to reflect the changes
+        // Example: Reload the page to reflect the changes
+        window.location.reload();
+        
+    })
+    .catch(error => {
+        console.error('Error submitting return order:', error);
+    });
+    
+
+}
+</script>
+
+<%-include('../layouts/footer.ejs') %>

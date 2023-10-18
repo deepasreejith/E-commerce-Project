@@ -1,0 +1,60 @@
+<%-include('../layouts/admin_header.ejs') %>
+<h5 style="margin-top: 20px; margin-left: 42rem;"><strong>UNLIST PRODUCTS</strong></h5>
+  <hr>
+<div id="page-content-wrapper" style="margin-left: 10px;margin-top: 20px; width: 70%;">
+<div class="container" style=" width: 80%; height: auto; margin-top: 50px;">
+    <table class="table table-striped" style="margin-left: 250px; width: 800px;">
+        <thead>
+          <tr>
+            <th scope="col"><strong> Image</strong></th>
+            <th scope="col"><strong>Name</strong</th>
+            <th scope="col"><strong>Category</strong></th>
+            <th scope="col"><strong>Subcategory</strong></th>
+            <th scope="col"><strong>Actions</strong></th>
+          </tr>
+        </thead>
+        <tbody>
+            <% products.forEach(function(item) { %>
+                <tr>
+                  <td><img src="productimages/<%= item.images[0] %>" width="60px" height="50px" alt="<%= item.images[0] %>"></td>
+                  <td><%= item.name %></td>
+                  <td>
+                    <% item.category.forEach(function(category) { %>
+                        <%= category.name %>
+                    <% }); %>
+                </td>
+                <td><% item.subcategory.forEach(function(subcategory) { %>
+                    <%= subcategory.name %>
+                <% }); %>
+                </td>
+                  <td>
+                  
+                  <button class="btn btn-success btn-sm listButton" data-category-id="<%= item._id %>">Add to list </button>
+    
+                </td>
+                </tr>
+                <% }); %>
+        </tbody>
+      </table>
+      
+    </div>
+</div>
+    <script>
+        document.querySelectorAll('.listButton').forEach(function(button) {
+            button.addEventListener('click', function () {
+                // Get the category ID from the data attribute
+                const categoryId = this.getAttribute('data-category-id');
+                
+                // Display a confirmation dialog
+                const result = confirm(`Are you sure want to list this product ?`);
+      
+                // If the user clicks "Yes," proceed to the delete action
+                if (result === true) {
+                    // Redirect to the delete route with the category ID
+                    window.location.href = `/admin/addlistproduct?id=${categoryId}`;
+                }
+            });
+        });
+      </script>
+
+<%-include('../layouts/admin_footer.ejs') %>

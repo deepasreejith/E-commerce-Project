@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beauty Bonanza</title>
+    
+    <link rel="shortcut icon" type="image" href="https://png.pngtree.com/png-clipart/20211024/original/pngtree-salon-logo-png-image_6872052.png" width="80px" height="80px">
+    <link rel="stylesheet" href="adminstyle.css">
+   <link rel="stylesheet" href="cartstyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+  </head>
+<body class="main">
+  <div class="sidebar col-md-2 col-5">
+    
+    <h4>Beauty Bonanza</h4>
+   <br>
+    <ul >
+        <li >
+          <a href="/admin/home" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
+            class="fas fa-tachometer-alt me-2"></i>Dashboard</a>
+        </li>
+        <br>
+        <li >
+          <a href="/admin/category" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
+            class="fas fa-list me-2"></i>Category</a>
+        </li>
+        <br>
+        <li>
+        <a href="/admin/subcategory" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
+          class="fas fa-gift me-2"></i>Subcategory</a>
+        </li>
+        <br>
+        <li>
+          <a href="#" class="submenu-toggle  list-group-item list-group-item-action bg-transparent second-text fw-bold" onclick="toggleSubmenu('product-submenu')">
+            <i class="fas fa-gift me-2"></i> Products
+        </a>
+            <ul class="submenu">
+              <li><a href="/admin/product" style="color: white;">Product</a></li>
+              <li><a href="/admin/unlistproduct" style="color: white;">Unlist Product</a></li>
+            </ul>
+        </li>
+        <br>
+        <li>
+          <a href="/admin/orderlist" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
+            class="fas fa-box me-2"></i>Orders</a>
+        </li>
+        <br>
+        <li>
+          <a href="#" class="submenu-toggle  list-group-item list-group-item-action bg-transparent second-text fw-bold" onclick="toggleSubmenu('product-submenu')">
+            <i class="fa-solid fa-file me-2"></i> Reports
+        </a>
+            <ul class="submenu">
+              <li><a href="/admin/sales_report" style="color: white;">Sales Report</a></li>
+              <li><a href="/admin/return_report" style="color: white;">Sales Return </a></li>
+            </ul>
+        </li>
+        <br>
+        <li>
+          <a href="/admin/customer" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
+            class="fas fa-users me-2"></i>Customers</a>
+        </li>
+        <br>
+        <li>
+          <a href="/admin/coupon" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
+            class="fa-regular fa-newspaper me-2"></i>Coupon</a>
+        </li>
+        <br>
+        <li>
+          <a href="/admin/banner" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
+            class="fa-regular fa-note-sticky me-2"></i>Banner</a>
+        </li>
+        <br>
+        <li>
+          <a href="/admin/categoryoffer" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
+            class="fa-solid fa-sack-dollar me-2"></i>Offer</a>
+        </li>
+        <br>
+        <li>
+          <a href="/admin/logout" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
+            class="fa-regular fa-circle-user me-2"></i>Logout</a>
+        </li>
+        <!-- Add more menu items here -->
+    </ul>
+</div>
+
+

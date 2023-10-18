@@ -1,0 +1,74 @@
+<%-include('../layouts/header.ejs') %>
+<br>
+<div class="row">
+    
+    <h5 style="padding-left: 150px;"><strong>My Account</strong></h5>
+    <br>
+<div class="col-md-4" style="margin-right: 20px;margin-left: 120px; margin-bottom: 100px;">
+    <div class="box" style="border: 2px solid #dbcdcd; padding: 20px; border-radius: 20px;box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);line-height: 1;height: 400px;">
+        
+        <div class="list-group" style="line-height: 33px;border-width: 0; ">
+            <a href="#" class="list-group-item list-group-item-action  ">
+              <ul style="list-style-type: none;padding-left: 0;">
+                <li><i class="fa-solid fa-user"></i><strong>  <%= user.name %></strong></li>
+                <li><small><%= user.email %></small></li>
+              </ul>
+            </a>
+            <a href="/wishlist" class="list-group-item list-group-item-action"> Wishlist</a>
+            <a href="/orderhistory" class="list-group-item list-group-item-action">My Orders</a>
+            <a href="/myaddress" class="list-group-item list-group-item-action">Delivery Addreses</a>
+            <a href="/change_password" class="list-group-item list-group-item-action ">Change Password</a>
+            <a href="/mywallet" class="list-group-item list-group-item-action"> Wallet</a>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-md-6" >
+    <div class="box" style="border: 2px solid #dbcdcd; padding: 20px; border-radius: 20px;box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);line-height: 1;height: 550px;">
+    <h6><strong>Account Information</strong></h6>
+    <br>
+    <br>
+    <form action="/editmyaccount" method="POST">
+   
+        
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" name="name" value=" <%= user.name %>"   >
+              </div>
+              <br>
+              <br>
+            <div class="form-group">
+              <label for="email">Email address</label>
+              <input type="email" class="form-control" name="email" aria-describedby="emailHelp" value="<%= user.email %>" readonly >
+              
+            </div>
+            <br>
+              <br>
+            <div class="form-group">
+              <label for="mobile">Mobile Number</label>
+              <input type="number" class="form-control" name="mobile"  placeholder="+91" >
+              
+            </div>
+            <br>
+              <br>
+            <div class="form-group">
+              <label>Gender</label>
+              <select class="form-select" name="gender" aria-label="Default select example">
+                <option selected>Choose..</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            
+            
+            <button type="submit" class="btn btn-light " style="background-color: rgb(250, 191, 241);width: 300px; height: 40px; border-radius: 50px; font-size: large; margin-top: 60px; margin-left: 150px;">Update</button>
+          </form>
+      
+ 
+   
+    </div>
+    </div>
+    </div>
+<%-include('../layouts/footer.ejs') %>

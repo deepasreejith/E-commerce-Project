@@ -1,0 +1,59 @@
+<%-include('../layouts/header.ejs') %>
+<br>
+<h5 style="margin-left: 900px; color: green;"><strong>Wallet Balance:Rs  <%= wallet.amount %> </strong></h5>
+<h6 style="text-align: center;"><strong>Wallet Transactions</strong></h6>
+    <div class="container"  style="width: 70%;   text-align:left;border: 2px solid #dbcdcd; padding: 20px; border-radius: 20px;box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); margin-bottom: 80px;">
+        <table class="table table-striped" style="margin-left: 10px;">
+            <thead>
+              <tr>
+                <th scope="col"><strong>Order ID</strong></th>
+                <th scope="col"><strong>Date</strong></th>
+                <th scope="col"><strong>Amount</strong></th>
+                <th scope="col"><strong>Payment</strong></th>
+                <th scope="col"><strong>Description</strong></th>
+                
+              </tr>
+            </thead>
+            <tbody>
+                <% wallet_transaction.forEach(function(item) { %>
+                    <tr>
+                      <td><%= item.OrderID %></td>
+                      <td><%= moment(item.date).format('YYYY-MM-DD HH:mm:ss') %></td>
+                      <% if ( item.order_status === 1 ) { %>
+                      <td>- <%= item.amount %> </td>
+                      <% } else { %>
+                        <td>+ <%= item.amount %> </td>
+                        <% } %>
+                         
+                      <% if ( item.payment === '1' ) { %>
+                        <td>Cash on Delivery</td>
+                        <% } else if (item.payment === '2') { %>
+                          <td>Netbanking</td>
+                      <% } else if (item.payment === '3') { %>
+                        <td>Wallet</td>
+                        <% } else if (item.payment === '4') { %> 
+                          <td>Wallet+Netbanking</td> 
+                        <% } %>
+
+                        <% if ( item.order_status === 1) { %>
+                       <td>Order Placed</td>
+                       <% } else if ( item.order_status === 2 ) { %>
+                        <td>Order Cancelled</td>
+                        <% } else if ( item.order_status === 3 ) { %>
+                          <td>Order Delivered</td>
+                        <% } else if ( item.order_status === 4 ) { %>
+                          <td>Order Returned</td> 
+                        <% } else if ( item.order_status === 5 ) { %>
+                        <td>Order Processing</td>
+                        <% } else if ( item.order_status === 6 ) { %>
+                          <td>Order Rejected</td>
+                        <% } %>
+                      
+                
+                    </tr>
+                    <% }); %>
+            </tbody>
+          </table>
+          
+        </div>
+        <%-include('../layouts/footer.ejs') %>

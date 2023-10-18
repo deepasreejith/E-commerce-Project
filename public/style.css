@@ -1,0 +1,26 @@
+body{
+    
+    font-family:Georgia, 'Times New Roman', Times, serif ;
+    background-color: rgb(248, 242, 248);
+    min-height: 100vh;
+}
+.inner{
+    overflow:hidden;
+   
+}
+.inner img{
+    transition: all 1.5s ease;
+}
+.inner:hover img{
+    transform: scale(1.5);
+}
+header{
+    position: sticky;
+   top: 0;
+   z-index: 1;
+
+    
+}
+footer{
+    margin-top: auto;
+}

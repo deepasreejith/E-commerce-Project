@@ -1,0 +1,55 @@
+<%-include('../layouts/header.ejs') %>
+<style>
+  .wishlist-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  float: right;
+}
+
+.wishlist-button.active {
+  color: red;
+}
+</style>
+<br>
+<div class="container" id="top-cards">
+    <div class="row">
+        <% wishlistitems.forEach(function(item) { %>
+        <div class="col-md-4 ">
+          <%  if (item.productDetails.quantity === 0) { %>
+            <span class="badge rounded-pill bg-dark">OutStock</span>
+            <% } else { %>
+              <span class="badge bg-light" >  </span>
+            <% } %>
+            <div class="card text-center mb-4" style="width: 18rem; justify-content: space-between; border-color: white; ">
+               <a href="/product_view?id=<%= item.item %>&data=<%= wishdata %>"> <img class="card-img-top" src="productimages/<%= item.productDetails.images[0] %>" style="width: 160px; height: 150px; " alt="<%= item.productDetails.images[0] %>" class="card-img-top"></a>
+                <div class="card-body  ">
+                  <h4 class="card-title"><%= item.productDetails.name %></h4>
+                  <h6 class="card-text"><strong>MRP Rs:<%= item.productDetails.mrp %></strong></h6>
+                  <%  if (item.productDetails.quantity === 0) { %>
+                    <button class="btn btn-white" style="background-color: rgb(250, 191, 241)" disabled>Add to Cart</button>
+                    <% } else { %>
+                  <a href="/add-to-cart?id=<%= item.item %>&data=<%= wishdata %>"  class=" btn btn-white " id="add-to-cart-button"  style="background-color: rgb(247, 202, 250);">Add to Cart</a>
+                  
+                  <a href="/remove-from-wishlist?id=<%= item.item %>&data=<%= wishdata %>"> <button class="wishlist-button active" onclick="toggleWishlist(this)">
+                    <i class="fas fa-heart"></i>
+                  </button></a>
+                  <% } %>
+                </div>
+              </div>
+        </div>
+        
+        <% }); %>
+     
+    </div>
+
+    
+</div>
+
+<script>
+  function toggleWishlist(button) {
+  button.classList.toggle('active');
+}
+</script>
+<%-include('../layouts/footer.ejs') %>

@@ -1,0 +1,73 @@
+<%-include('../layouts/admin_header.ejs') %>
+<h5 style="margin-left: 42rem;margin-top: 20px;"><strong>EDIT COUPON</strong></h5>
+<hr>
+<div id="page-content-wrapper">
+
+    <div class="container" style="width: 50%; height: 70%; margin-top: 50px;">
+    <form action="" method="post" >
+        <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="name">Coupon Name</label>
+                <input type="text" class="form-control" name="name" value="<%= coupon.name %>" id="field1" >
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="code">Coupon Code</label>
+                <input type="text" class="form-control" name="code" value="<%= coupon.code %>" id="field2" >
+              </div>
+            </div>
+          </div>
+        <br>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                  <label for="sdate">Start Date</label>
+              
+                  <div class="input-group date" id="datepicker">
+                    <input type="text" class="form-control" id="sdate" value="<%= coupon.startdate %>" name="sdate" />
+                    <div class="input-group-append" style="cursor: pointer;">
+                      <span class="input-group-text bg-light d-block">
+                        <i class="fa fa-calendar"></i>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="edate">Expire Date</label>
+                
+                    <div class="input-group date" id="datepicker2">
+                      <input type="text" class="form-control" id="edate" value="<%= coupon.expiredate %>" name="edate" />
+                      <div class="input-group-append" style="cursor: pointer;">
+                        <span class="input-group-text bg-light d-block">
+                          <i class="fa fa-calendar"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+            </div>
+          </div>
+        
+       <br>
+       <div class="form-group col-md-6">
+        <div class="form-group">
+            <label for="discount">Discount</label>
+            <input type="text" class="form-control" name="discount" value="<%= coupon.discount %>" id="field5" >
+            
+          </div>
+        </div>
+        <br>
+        <button class="btn btn-dark " type="submit">Update</button>
+        <br>
+       
+      </form>
+    </div>
+
+
+  </div>
+</div>
+
+<%-include('../layouts/admin_footer.ejs') %>

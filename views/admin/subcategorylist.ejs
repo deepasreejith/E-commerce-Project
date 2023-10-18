@@ -1,0 +1,70 @@
+<%-include('../layouts/admin_header.ejs') %>
+<h5 style="margin-top: 20px; margin-left: 42rem;"><strong>SUBCATEGORIES</strong></h5>
+<hr>
+<div id="page-content-wrapper" style="margin-left: 10px;margin-top: 20px; width: 70%; ">
+  
+<div class="container"  >
+  <a style="margin-left: 1050px;" href="/admin/addsubcategory"><button type="button" class="btn btn-dark " >Add Subcategory</button></a>
+<table class="table table-striped"  style="margin-left: 320px; width: 870px; margin-top: 20px;">
+    <thead>
+      <tr>
+        <th scope="col"><strong> Image</strong></th>
+        <th scope="col"><strong>Subategory</strong></th>
+        <th scope="col"><strong>Category</strong></th>
+        <th scope="col"><strong>Actions</strong></th>
+      </tr>
+    </thead>
+    <tbody>
+        <% subcategories.forEach(function(item) { %>
+            <tr>
+              <td><img src="subcategoryimages/<%= item.image %>" width="60px" height="50px" alt="<%= item.image %>"></td>
+              <td><%= item.name %></td>
+              <td>
+                <% item.category.forEach(function(category) { %>
+                    <%= category.name %>
+                <% }); %>
+            </td>
+              <td><a href="/admin/editsubcategory?id=<%= item._id %>" type="button" class="btn btn-success btn-sm">Edit </a>
+              <!--  <a href="/admin/deletesubcategory?id=<%= item._id %>" type="button" class="btn btn-danger btn-sm">Delete</a>  -->
+              <button class="btn btn-danger btn-sm deleteButton" data-category-id="<%= item._id %>">Delete </button>
+
+            </td>
+            </tr>
+          <% }); %>
+    </tbody>
+  </table>
+  
+  <% if(typeof message !=='undefined'){
+    %>
+    <p style="color: rgb(8, 156, 23);">
+    <%= message %>
+    </p>
+    <%
+    }
+    %>
+</div>
+
+
+
+</div>
+</div>
+
+<script>
+    document.querySelectorAll('.deleteButton').forEach(function(button) {
+        button.addEventListener('click', function () {
+            // Get the category ID from the data attribute
+            const categoryId = this.getAttribute('data-category-id');
+            
+            // Display a confirmation dialog
+            const result = confirm(`Are you sure want to delete ?`);
+  
+            // If the user clicks "Yes," proceed to the delete action
+            if (result === true) {
+                // Redirect to the delete route with the category ID
+                window.location.href = `/admin/deletesubcategory?id=${categoryId}`;
+            }
+        });
+    });
+  </script>
+
+<%-include('../layouts/admin_footer.ejs') %>

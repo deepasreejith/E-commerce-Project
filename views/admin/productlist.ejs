@@ -1,0 +1,111 @@
+<%-include('../layouts/admin_header.ejs') %>
+<h5 style="margin-top: 20px;margin-left: 42rem;"><strong>ALL PRODUCTS</strong></h5>
+<hr>
+
+
+  <div class="filter" style=" padding-top: 20px;margin-left: 350px ;margin-right: 150px;"> 
+    <div class="row">
+    <div class="col-md-6">
+
+      <form class="d-flex" id="searchForm" action="/admin/search" method="post">
+        <input class="form-control me-2" name="name" type="search" placeholder="Search Product" aria-label="Search">
+        <button class="btn btn-dark" type="submit">Search</button>
+      </form>
+     </div>
+     <div class="col-md-6" >
+      <form class="d-flex" id="searchForm" action="/admin/filter" method="post">
+        <select  class="form-select" name="combobox">
+          <option value=""> select category</option>
+            <% categories.forEach(function(category) { %>
+          <option value="<%= category._id %>" ><%= category.name %></option>
+            <% }); %>
+        </select>
+        &nbsp; 
+       
+        <button class="btn btn-dark" type="submit">Filter</button>
+      </form>
+      </div>      
+  </div>
+    </div>
+<br>
+<hr>
+<div id="page-content-wrapper" style="margin-left: 10px;margin-top: 20px; width: 70%;">
+  <a style="margin-left: 1100px; " href="/admin/addproduct"><button type="button" class="btn btn-dark " >Add Product</button></a>
+    <div class="container" style="width: 80%; height: auto; margin-top: 20px;">
+    <table class="table table-striped" style="margin-left: 250px; width: 870px;">
+        <thead>
+          <tr>
+            <th scope="col"><strong> Image</strong></th>
+            <th scope="col"><strong>Name</strong></th>
+            <th scope="col"><strong>Category</strong></th>
+            <th scope="col"><strong>Subcategory</strong></th>
+            <th scope="col"><strong>Actions</strong></th>
+          </tr>
+        </thead>
+        <tbody>
+            <% products.forEach(function(item) { %>
+                <tr>
+                 
+                  <td><img src="productimages/<%= item.images[0] %>" width="60px" height="50px" alt="<%= item.images[0] %>"></td>
+                 
+                  <td><%= item.name %></td>
+                  <td>
+                    <% item.category.forEach(function(category) { %>
+                        <%= category.name %>
+                    <% }); %>
+                </td>
+                <td><% item.subcategory.forEach(function(subcategory) { %>
+                    <%= subcategory.name %>
+                <% }); %>
+                </td>
+                  <td><a href="/admin/editproduct?id=<%= item._id %>" type="button" class="btn btn-success btn-sm">Edit </a>
+                  <!--  <a href="/admin/deletesubcategory?id=<%= item._id %>" type="button" class="btn btn-danger btn-sm">Delete</a>  -->
+                  <button class="btn btn-danger btn-sm deleteButton" data-category-id="<%= item._id %>">Delete </button>
+    
+                </td>
+                </tr>
+                <% }); %>
+        </tbody>
+      </table>
+      <% if (currentPage != null) { %>
+      <nav aria-label="Page navigation example" style="margin-left: 500px; margin-top: 30px; position: sticky;">
+        <ul class="pagination justify-content-center" >
+            <li class="page-item <%=(currentPage == 1) ? 'disabled' : ''%>">
+                <a class="page-link" href="?page=<%=(parseInt(currentPage) - 1)%>" tabindex="-1" aria-disabled="true" style="color: black;">Previous</a>
+            </li>
+            <% for (let i = 1; i <= totalPages; i++) { %>
+                <li class="page-item <%= (i == currentPage) ? 'active' : '' %>">
+                    <a class="page-link" href="?page=<%= i %>" style="color: black;"><%= i %></a>
+                </li>
+            <% } %>
+            <li class="page-item <%=(currentPage == totalPages) ? 'disabled' : ''%>">
+                <a class="page-link" href="?page=<%=(parseInt(currentPage) + 1)%>" style="color: black;">Next</a>
+            </li>
+        </ul>
+    </nav>
+    <% } %>
+    </div>
+  </div>
+    
+    
+    
+    
+    <script>
+        document.querySelectorAll('.deleteButton').forEach(function(button) {
+            button.addEventListener('click', function () {
+                // Get the category ID from the data attribute
+                const categoryId = this.getAttribute('data-category-id');
+                
+                // Display a confirmation dialog
+                const result = confirm(`Are you sure want to delete ?`);
+      
+                // If the user clicks "Yes," proceed to the delete action
+                if (result === true) {
+                    // Redirect to the delete route with the category ID
+                    window.location.href = `/admin/deleteproduct?id=${categoryId}`;
+                }
+            });
+        });
+      </script>
+
+<%-include('../layouts/admin_footer.ejs') %>

@@ -1,0 +1,34 @@
+<%-include('../layouts/admin_header.ejs') %>
+
+<div id="page-content-wrapper" style="margin-left: 200px;">
+  <h5 style="margin-top: 20px;margin-left: 42rem;margin-top: 20px;"><strong>ADD BANNER</strong></h5>
+    <hr>
+  <div class="container" style="width: 50%; height: auto; margin-top: 100px;border: 2px solid #dbcdcd; padding: 20px;box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); ">
+
+        <form action="" method="post" enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label ><B>Select Image</B></label>
+                <br>
+                <input type="file" name="image" class="form-control-file" id="exampleFormControlFile1">
+              </div>
+              <br>
+              <label><b>Select Link</b></label>
+          <br>
+         <input type="text" class="form-control" name="link" value="">
+          <br>
+              <button class="btn btn-dark "  type="submit">Add</button>
+              <br>
+              <% if(typeof message !=='undefined'){
+                %>
+                <p style="color: rgb(8, 156, 23);">
+                <%= message %>
+                </p>
+                <%
+                }
+                %>
+        </form>
+      </div>
+</div>
+
+<%-include('../layouts/admin_footer.ejs') %>
