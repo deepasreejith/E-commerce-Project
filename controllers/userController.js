@@ -41,7 +41,6 @@ var instance = new Razorpay({
 const resend = async(req,res)=>{
     const email = req.query.emailid;
     const flag = req.query.flag;
-   
     const otp = otpGenerator.generate(4, { upperCase: true, specialChars: false });
     user_reg_check_resend(flag,email,otp)
 }
@@ -128,23 +127,18 @@ const manage_reg =(req,res)=>{
     const otp = otpGenerator.generate(4, { upperCase: true, specialChars: false });
     const email = req.body.email
     user_reg_check(req,res,email,otp)
-  
    }
    else if(action == 'signin')
    {
-    console.log("sigin")
-    user_signin(req,res);
-    
+    user_signin(req,res); 
  }
 }
 //check in user_reg already generate otp if it yes update it
 const user_reg_check = async(req,res,email,otp)=>{
     const category = await Category.find({})
     const userCheck = await user_reg.find({$and :[{email:email},{otpFlag:0}]});
-    console.log("usercheck:"+userCheck);
     let count=null
     if(userCheck.length !== 0){
-        console.log("not null check")
     const userUpdate = await user_reg.updateOne(
             {
               $and: [
@@ -161,8 +155,7 @@ const user_reg_check = async(req,res,email,otp)=>{
           if(userUpdate){
             sendVerifyOtp(email,otp)
             emailValue = req.body.email;
-             nameValue = req.body.name;
-            
+            nameValue = req.body.name;
             res.render('registration',{emailValue,nameValue,message1:"OTP send succesfully",category,count})
           }
     }else{
@@ -175,12 +168,9 @@ const user_reg_check = async(req,res,email,otp)=>{
 const user_signin = async(req,res)=>{
     try{
         const category = await Category.find({})
-        
        let count = null
         const email = req.body.email;
         const otp = req.body.otp; 
-       
-       
         const userData1 = await user_reg.find({email:email}).sort({createdAt:-1}).limit(1);
        
         if(userData1.length > 0){
@@ -191,7 +181,7 @@ const user_signin = async(req,res)=>{
             if(userotp === otp){ 
                 const userExist = await User.find({email:email})
                 if(userExist.length === 0){
-                console.log('testing otp module')
+                
                 insertUser(req,res)
                 }else{
                     res.render('registration',{message:"User already exist ",emailValue,nameValue,category,count})
@@ -220,13 +210,11 @@ const insertOtp = async(otp,req,res)=>{
             otpFlag:0
         });
         const user_regData = await register_user.save();
-        console.log(user_regData)
         if(user_regData){
             sendVerifyOtp(req.body.email,otp);
              emailValue = req.body.email;
              nameValue = req.body.name;
             res.render('registration',{emailValue,nameValue,message1:"OTP send succesfully",category,count})
-            
            }else{
             res.render('registration',{emailValue,nameValue,message1:"failed in OTP send",category,count})
            }
@@ -240,21 +228,16 @@ const insertUser = async(req,res)=>{
     try{
         let count = null
         const category = await Category.find({})
-        console.log('test')
         const spassword = await securePassword(req.body.password);
-        console.log(req.body)
         const user = new User({
            name:req.body.name,
            email:req.body.email,
            password:spassword,
-          
         }); 
        
        const userData = await user.save();
-
        if(userData){
         res.redirect('/login')
-      //  res.render('registration',{message:"your registration has been success "})
        }else{
         res.render('registration',{message:"your registration has been failed",category,count})
        }
@@ -301,31 +284,23 @@ const loadLogin = async(req,res)=>{
         const category = await Category.find({})
         let emailValue = '';
         let passwordValue = '';
-       // let userid = req.session.user;
-       // let count = await cartCount(userid)
        let count = null
         res.render('login',{emailValue,passwordValue,category,count});
-
     }catch(error){
         console.log(error.message)
     }
 }
 //login user manage by otp
 const manage_user = async(req,res)=>{
-    
     try{
      const category = await Category.find({})
-    const action = req.body.action;
-    console.log("action is: " + action)
+     const action = req.body.action;
    if(action == 'genotp')
    {
     const email = req.body.email
-    
     const userExist = await User.find({email:email});
-    console.log("user:"+userExist)
     if(userExist.length!== 0){
     const loginotp = otpGenerator.generate(4, { upperCase: true, specialChars: false });
-    console.log("loginotp:"+loginotp)
     
     user_login_Otpcheck(req,res,loginotp)
     }else{
@@ -349,13 +324,10 @@ const manage_user = async(req,res)=>{
 //user login time otp exist check
 const user_login_Otpcheck = async(req,res,otp)=>{
     try{
-        const category = await Category.find({})
+    const category = await Category.find({})
     const email = req.body.email
-    console.log("email is:"+email)
     const userLoginCheck = await user_reg.find({$and :[{email:email},{otpFlag:1}]});
-    console.log("usercheck:"+userLoginCheck);
     if(userLoginCheck.length !== 0){
-        console.log("not null check")
     const userLoginOtpUpdate = await user_reg.updateOne(
             {
               $and: [
@@ -370,7 +342,6 @@ const user_login_Otpcheck = async(req,res,otp)=>{
              
           );
           if(userLoginOtpUpdate){
-            console.log("email:"+ req.body.email)
             sendVerifyOtp(email,otp)
             emailValue = req.body.email;
             passwordValue = req.body.password;
@@ -393,25 +364,19 @@ const insertLoginOtp = async(otp,req,res)=>{
     try{
         const category = await Category.find({})
         const login_user = new user_reg({
-            
             email:req.body.email,
             otp:otp,
             otpFlag:1
         });
-       console.log(login_user)
         const user_loginData = await login_user.save();
-       // console.log(user_loginData)
        const email = req.body.email;
        let userid = req.session.user;
-       //     const user = await User.find({_id:userid});
             let count = await cartCount(userid)
             emailValue = req.body.email;
-             passwordValue = req.body.password;
+            passwordValue = req.body.password;
         if(user_loginData){
-            sendVerifyOtp(email,otp);
-             
-            res.render('login',{emailValue,passwordValue,message1:"OTP send succesfully",category,user,count})
-            
+            sendVerifyOtp(email,otp); 
+            res.render('login',{emailValue,passwordValue,message1:"OTP send succesfully",category,user,count}) 
            }else{
             res.render('login',{emailValue,passwordValue,message1:"failed in OTP send",category,user,count})
            }
@@ -423,43 +388,26 @@ const insertLoginOtp = async(otp,req,res)=>{
 //user login
 const user_login = async(req,res)=>{
     try{
-       // let userid = req.session.user;
-     //   const user = await User.find({_id:userid});
         let count = null
         const category = await Category.find({})
         const email = req.body.email;
         const otp = req.body.otp; 
-        console.log("password:"+req.body.password)
-       // const spassword = await securePassword(req.body.password);
         const password = req.body.password
-        console.log(otp);
         const status = await User.findOne({$and :[{email:email},{status:"Blocked"}]})
-        console.log("status:"+status)
         let emailValue = '';
         let passwordValue = '';
-        
-
         if( status === null )
         {
-       
         const userData1 = await user_reg.find({$and :[{email:email},{otpFlag:1}]}).sort({createdAt:-1}).limit(1);
-       
         if(userData1.length > 0){
           
             const userotp = userData1[0].otp;
            
             if(userotp === otp){ 
                 const userPasswordCheck = await User.findOne({email:email})
-                console.log("userPasswordCheck"+userPasswordCheck)
-               
                 const passwordMatch = await bcrypt.compare(password, userPasswordCheck.password);
                 if (passwordMatch){
-               
               req.session.user=userPasswordCheck._id;
-              console.log("user session:"+req.session.user)
-              
-                
-                
               res.redirect('/home');
                 }else{
                     res.render('login',{message:"invalid password ",category,emailValue,passwordValue,count})
@@ -484,7 +432,6 @@ const forgetLoad = async(req,res)=>{
         const category = await Category.find({})
         let emailValue = '';
         let passwordValue = '';
-        
         let count = null
         res.render('forget',{emailValue,passwordValue,category,count})
     }catch(error){
@@ -504,7 +451,6 @@ const manage_passwordchange =async (req,res)=>{
    if(action == 'genotp')
     {
      const userExist = await User.find({email:email});
-     console.log("user:"+userExist)
      if(userExist.length!== 0){
          const otp = otpGenerator.generate(4, { upperCase: true, specialChars: false });
          passwordchange_check(req,res,otp)
@@ -531,7 +477,6 @@ const passwordchange_check = async(req,res,otp)=>{
         let count = await cartCount(userid)
         const email = req.body.email
         const userPasswordCheck = await user_reg.find({$and :[{email:email},{otpFlag:2}]});
-        console.log("usercheck:"+userPasswordCheck);
         if(userPasswordCheck.length !== 0){
             console.log("not null check")
             const userChangePasswordOtpUpdate = await user_reg.updateOne(
@@ -548,7 +493,6 @@ const passwordchange_check = async(req,res,otp)=>{
                  
               );
               if(userChangePasswordOtpUpdate){
-                console.log("email:"+ req.body.email)
                 sendVerifyOtp(email,otp)
                 emailValue = req.body.email;
                 passwordValue = req.body.password;
@@ -583,9 +527,7 @@ const insertForgetpasswordOtp = async(otp,req,res)=>{
          passwordValue = req.body.password;
         if(forgetUser_Data){
             sendVerifyOtp(req.body.email,otp);
-             
             res.render('forget',{emailValue,passwordValue,message1:"OTP send succesfully",category,user,count})
-            
            }else{
             res.render('forget',{emailValue,passwordValue,message1:"failed in OTP send",category,user,count})
            }
@@ -602,7 +544,6 @@ const changePassword = async(req,res)=>{
         let count = null
         const email = req.body.email;
         const otp = req.body.otp; 
-        console.log("password:"+req.body.password)
         const spassword = await securePassword(req.body.password);
         emailValue = req.body.email;
         passwordValue = req.body.password;
@@ -610,10 +551,7 @@ const changePassword = async(req,res)=>{
         const userData1 = await user_reg.find({$and :[{email:email},{otpFlag:2}]}).sort({createdAt:-1}).limit(1);
        
         if(userData1.length > 0){
-           // console.log(userData1)
-            console.log(userData1[0])
             const userotp = userData1[0].otp;
-            console.log(userotp)
             if(userotp === otp){ 
                 const userPasswordCheck = await User.findOne({email:email})
                 
@@ -640,11 +578,8 @@ const loadHome = async(req,res)=>{
     try {
         let userid = req.session.user;
         const user = await User.findOne({_id:userid})
-        
         const category = await Category.find({})
-        
         const banner = await Banner.find({})
-        
         let count = await cartCount(userid)
         res.render('home',{category,banner,count,user})
     } catch (error) {
@@ -658,8 +593,6 @@ const loadCategory = async(req,re)=>{
         let userid = req.session.user;
         const user = await User.findOne({_id:userid})
         const category = await Category.find({})
-        console.log(category)
-       
         let count = await cartCount(userid)
         res.render('header',{category,user,count})
     } catch (error) {
@@ -672,7 +605,6 @@ const loadShop = async(req,res)=>{
         let userid = req.session.user;
         const user = await User.findOne({_id:userid})
          gid = req.query.id
-        console.log("gid=="+gid)
         const orderObjectId = new ObjectId(gid)
         const category = await Category.find({})
         
@@ -700,8 +632,7 @@ const loadShop = async(req,res)=>{
   
         let count = await cartCount(userid)
         const wishlist = await Wishlist.findOne({user_id:userid});
-       const categoryid = req.query.id
-       
+        const categoryid = req.query.id
         res.render('shop',{product: products,category,user,count,wishlist,categoryid})
     } catch (error) {
         console.log(error.message)
@@ -713,12 +644,10 @@ const loadViewPage = async(req,res)=>{
     try {
         let wishflag;
         let wishdata = req.query.data;
-        
         let userid = req.session.user;
         const user = await User.findOne({_id:userid})
         const id = req.query.id;
         const category = await Category.find({})
-       // const product = await Product.find({_id:id});
        const orderObjectId = new ObjectId(id)
        const products = await Product.aggregate([
         { $match: { _id:orderObjectId  } },
@@ -761,15 +690,12 @@ const search = async(req,res)=>{
        
         const ITEMS_PER_PAGE = 6;
         const page = req.query.page || 1;
-       
         let userid = req.session.user;
         const user = await User.findOne({_id:userid})
         const category = await Category.find({})
         let searchTerm = req.body.name;
         if(typeof searchTerm === 'undefined'){
-            console.log("**************")
             searchTerm = req.query.searchTerm
-            console.log("searchTerm"+searchTerm)
         }
        
         const totalProducts = await Product.countDocuments({
@@ -815,7 +741,6 @@ const search = async(req,res)=>{
         .limit(ITEMS_PER_PAGE);
         let count = await cartCount(userid)
         const wishlist = await Wishlist.findOne({user_id:userid});
-        //const pageurl = 1
         res.render('searchpage',{product,category,user,count,totalPages, currentPage: page,searchTerm,wishlist });
        
     } catch (error) {
@@ -901,7 +826,6 @@ const cartCount = async(userid)=>{
         
         if(typeof userid !== 'undefined' ){ 
             count =0
-            //const newObjectId = new ObjectId(userid);
             const cart = await Cart.findOne({user_id:userid})
             if (cart && cart.product_id) {
                 count = cart.product_id.length;
@@ -909,12 +833,7 @@ const cartCount = async(userid)=>{
             } else {
                 console.log("Cart is null or product_id is undefined");
             }
-          /*  if(cart.length >0){
-             count =  cart.product_id.length
-            console.log("count::"+count)
-            }else{
-                count = null
-            }*/
+         
         }
         return count;
     }
@@ -1005,7 +924,7 @@ const plusbuttoninc = async(req,res)=>{
             
             if(currentQuantity <= limit){
                 const update = await Cart.findOneAndUpdate({_id:cartid,'product_id.item':productid},{$inc:{'product_id.$.quantity':1}});
-                console.log("update"+update)
+                
                  if(update)
                  {
                      const cart = await Cart.findOne({'product_id.item':productid},{ 'product_id.$': 1 })
@@ -1049,7 +968,7 @@ const minusbuttondec = async(req,res)=>{
         if(currentQuantity === quantity1 && (Lflag === 1 || Qflag === 1) ){
             const update = await Cart.findOneAndUpdate({_id:cartid,'product_id.item':productid},{ $set: { 'product_id.$.Qflag': 0,'product_id.$.Lflag': 0}} );
             res.json({ quantity: quantity1 });
-            console.log("line 897")
+            
         }else{
         
         const update = await Cart.findOneAndUpdate({_id:cartid,'product_id.item':productid},{ $set: { 'product_id.$.Qflag': 0,'product_id.$.Lflag': 0},$inc:{'product_id.$.quantity':-1} } );
@@ -1073,13 +992,10 @@ const updateLimit = async(req,res)=>{
     try {
         const productid = req.body.id;
         const cartid = req.body.cartid
-       
         const newObjectId = new ObjectId(productid);
-       
         const update = await Cart.findOneAndUpdate({_id:cartid,'product_id.item':productid}, 
             { $set: { 'product_id.$.Lflag': 1 } })
-        
-        
+         
     } catch (error) {
         console.log(error.message)
     }
@@ -1089,13 +1005,9 @@ const updatequantity = async(req,res)=>{
     try {
         const productid = req.body.id;
         const cartid = req.body.cartid
-        console.log("cartid====="+cartid)
         const newObjectId = new ObjectId(productid);
-        console.log("pro id======="+newObjectId)
         const update = await Cart.findOneAndUpdate({_id:cartid,'product_id.item':productid}, 
             { $set: { 'product_id.$.Qflag': 1 } })
-        console.log("updated")
-        
     } catch (error) {
         console.log(error.message)
     }
@@ -1176,10 +1088,7 @@ const saveAddress = async(req,res)=>{
     try {
         
         const action = req.query.action;
-        
         const userid = req.body.userid
-       
-
        const address = new Address({
         user_id : req.body.userid,
         name:req.body.name,
@@ -1221,7 +1130,6 @@ const payment = async(req,res)=>{
 const choosePayment = async(req,res)=>{
     try {
         const addId = req.query.id;
-        
         let userid = req.session.user;
         let walletAmount;
         const wallet = await Wallet.findOne({user_id:userid});
@@ -1235,7 +1143,7 @@ const choosePayment = async(req,res)=>{
         const user = await User.findOne({_id:userid})
         const category = await Category.find({})
         const cartitems = await Cart.find({user_id:userid})
-        console.log("cart----"+cartitems.total)
+        
         //----------------------------------------------
         const userObjectId = new ObjectId(userid);
         const cartDetail = await Cart.aggregate([
@@ -1327,9 +1235,7 @@ const checkout = async(req,res)=>{
         if(selectedValue === '3')
         {
             if(currentAmount > walletAmount){
-           // const message = 'Not enough Balance'
-           // count = await cartCount(userid)
-           // res.render('payment',{message:message,user,category,count,walletAmount})
+           
             }else{
                 console.log(selectedValue)
                
@@ -1355,7 +1261,7 @@ const checkout = async(req,res)=>{
                     OrderID:OrderID
                   });
                     const orderData = await order.save(); 
-                  console.log("-----------------------------"+orderData._id)
+                 
                   const wallet_transaction = new Wallet_transaction({
                     order_id : orderData._id,
                     user_id: userid,
@@ -1423,7 +1329,7 @@ const checkout = async(req,res)=>{
 
           const orderData = await order.save(); 
           
-          console.log("-----------------------")
+         
         //change product quantity based on order quantity
         const productQuantities = orderData.product_id.map(productItem => ({
             productId: productItem.item,
@@ -1509,7 +1415,6 @@ const onlinePayment = async(req,res)=>{
         const orders = await Order.find({cart_id:cartId})
         const orderId = orders[0]._id;
         const totalamount = orders[0].subtotal;
-        console.log("subtotal:"+totalamount)
         if(balanceAmount > 0){    //when user pay balance amount through online  in the case of insufficient wallet
                 
                 const currentAmount = totalamount -balanceAmount
@@ -1526,7 +1431,7 @@ const onlinePayment = async(req,res)=>{
                   });
                   const wallet_transactionData = await wallet_transaction.save();
                  const data = await Order.findByIdAndUpdate({_id: orderData._id},{ $set: { 'payment': '4' ,'netbankingAmount':balanceAmount,'walletAmount':currentAmount} })
-           console.log("data"+data)
+           
                   generateRazorpay(orderId,balanceAmount,req,res);
         }else{
             generateRazorpay(orderId,totalamount,req,res);
@@ -1605,7 +1510,6 @@ const verifyPayment = async(req,res)=>{
             console.log("oder failed")
             const update = await Order.findOneAndUpdate({_id:orderId}, 
                 { $set: { 'order_status': 6 } })
-               
                 const  message = 'Order Rejected'
                 const oid = orderId
                 res.json({message:message,oid:oid}) 
@@ -1621,13 +1525,8 @@ const success = async(req,res)=>{
     try {
         const message = req.query.message;
         const orderId = req.query.orderid;
-      
-        console.log("mess:"+message) 
-
         const newOrder = await Order.findById({_id:orderId});
         const newOrderId = newOrder.OrderID
-        console.log("----"+newOrderId)
-
         let userid = req.session.user;
         const user = await User.findOne({_id:userid})
         const category = await Category.find({})
@@ -1643,7 +1542,6 @@ const orderHistory = async(req,res)=>{
     try {
         const ITEMS_PER_PAGE = 8; 
         const page = req.query.page || 1;
-
         let userid = req.session.user;
         const user = await User.findOne({_id:userid})
         const category = await Category.find({})
@@ -1768,9 +1666,9 @@ const cancelOrder = async(req,res)=>{
         const walletData = await Wallet.findOne({user_id:userid});
         if(walletData){
             walletData.amount = (parseFloat(walletData.amount) + parseFloat(amount)).toFixed(2);
-          //  walletData.amount += amount;
+         
             await walletData.save();
-            console.log('Wallet updated successfully');
+            
         }else{
             const wallet = new Wallet({
                 user_id:userid,
@@ -1836,7 +1734,6 @@ const returnOrder = async(req,res)=>{
             //walletData.amount += amount;
             walletData.amount = (parseFloat(walletData.amount) + parseFloat(amount)).toFixed(2);
             await walletData.save();
-            console.log('Wallet updated successfully');
 
         }else{
             const wallet = new Wallet({
@@ -1925,7 +1822,7 @@ const updateAddress = async(req,res)=>{
         const pin = req.body.pin;
         const mobile = req.body.mno;
         const update = await Address.findByIdAndUpdate({_id:addressId},{$set:{name:name,address:useraddress,pin:pin,mobile:mobile}});
-         console.log("update "+update)
+        
         if(update){
             console.log("update ok");
             let userid = req.session.user;
@@ -1933,7 +1830,7 @@ const updateAddress = async(req,res)=>{
             const user = await User.findOne({_id:userid})
             const category = await Category.find({})
             let count = await cartCount(userid)
-          //  res.redirect('/myaddress')
+         
             res.render('editaddress',{message:"Address Update sucessfully",user,category,count,address})
            
         }
@@ -2060,7 +1957,7 @@ const removeFromWishlist = async(req,res)=>{
                
                else{
             res.redirect(`/product_view?id=${productid}`)
-          // res.redirect('/wishlist')
+          
           }
         }
           
@@ -2303,7 +2200,7 @@ const downloadInvoice = async(req,res)=>{
             return res.status(404).send('Order not found');
         }
        
-        console.log("orderDetail:", JSON.stringify(orderDetail))
+        //console.log("orderDetail:", JSON.stringify(orderDetail))
         
        
 

@@ -48,8 +48,9 @@
                         <td style="display: inline-block;"><a href="/orderdetails?id=<%= item._id %>" type="button" class="btn btn-light btn-sm" style="background-color: rgb(250, 191, 241);">View Details </a>
                           <% if ( item.order_status === 1  ) { %>
                             <button class="btn btn-success btn-sm cancelButton" data-order-id="<%= item._id %>">Cancel </button>
-                            <% } %>   
-
+                          <% } else { %>   
+                            <button class="btn btn-success btn-sm cancelButton" data-order-id="<%= item._id %>" disabled>Cancel </button>
+                            <% } %> 
                     </tr>
                     <% }); %>
             </tbody>

@@ -30,7 +30,7 @@ const loadLogin = async(req,res)=>{
         console.log(error.message)
     }
 }
-//admin varification
+//admin varification sucess
 const variyAdmin = async(req,res)=>{
     try {
         const email = req.body.email;

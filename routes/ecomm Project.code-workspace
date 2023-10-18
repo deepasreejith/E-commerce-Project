@@ -1,0 +1,54 @@
+{
+	"folders": [
+		{
+			"name": "Node Project",
+			"path": "../../Node Project"
+		},
+		{
+			"name": "web design brocamp",
+			"path": "../../web design brocamp"
+		},
+		{
+			"path": "../../express project"
+		},
+		{
+			"path": "../../view engine"
+		},
+		{
+			"path": "../../node.js_handlebar"
+		},
+		{
+			"path": "../../task2"
+		},
+		{
+			"path": "../../task3"
+		},
+		{
+			"path": "../../task4"
+		},
+		{
+			"path": "../../mongodb"
+		},
+		{
+			"path": "../../loginproject"
+		},
+		{
+			"path": "../../week9_project"
+		},
+		{
+			"path": "../../UMS"
+		},
+		{
+			"path": "../../example"
+		},
+		{
+			"path": "../../my project"
+		},
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "example"
+	}
+}
