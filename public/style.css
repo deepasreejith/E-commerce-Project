@@ -3,6 +3,7 @@ body{
     font-family:Georgia, 'Times New Roman', Times, serif ;
     background-color: rgb(248, 242, 248);
     min-height: 100vh;
+
 }
 .inner{
     overflow:hidden;
@@ -18,7 +19,6 @@ header{
     position: sticky;
    top: 0;
    z-index: 1;
-
     
 }
 footer{

@@ -20,7 +20,7 @@ const orderSchema = new mongoose.Schema({
         },
         return_reason:{
             type:Number,
-            required:false //1.Damaged,2.Wrong item,3.Changed mind
+            required:false //1.Damaged,2.Wrong item,3.Changed mind,4.others
         },
         return_status:{
             type:Number,

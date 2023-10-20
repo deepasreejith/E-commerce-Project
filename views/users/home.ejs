@@ -1,7 +1,5 @@
 <%-include('../layouts/header.ejs') %>
 
-
-
 <section>
  <hr style="width: auto;height: 10px;background-color: black;">
   <div class="carousel-container" style="z-index: 0; position: relative; "  >
@@ -44,7 +42,7 @@
 <div class="container" id="top-cards">
     <div class="row">
         <% category.forEach(function(item) { %>
-        <div class="col-md-4 ">
+        <div class=" col-md-4 ">
             <div class="card text-center mb-4" style="width: 18rem; justify-content: space-between; border-color: white;">
                 <img src="categoryimages/<%= item.image %>"  width="60px" height="150px" alt="<%= item.image %>" class="card-img-top" >
                 <div class="card-body">

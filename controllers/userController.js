@@ -1773,7 +1773,7 @@ const returnOrder = async(req,res)=>{
             }))
           );
     }
-    //when user return one by one then ttal amount reduced when it reach 0 then order completely returned
+    //when user return one by one then total amount reduced when it reach 0 then order completely returned
     if(newSubtotal === 0){
         await Order.updateOne({_id:orderId,'product_id': { $elemMatch: { item: product_id, quantity: quantity } }  },{$set:{order_status:4}})
     }
