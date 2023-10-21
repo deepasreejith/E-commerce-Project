@@ -2200,7 +2200,8 @@ const downloadInvoice = async(req,res)=>{
             return res.status(404).send('Order not found');
         }
        
-        //console.log("orderDetail:", JSON.stringify(orderDetail))
+        
+        console.log("orderDetail:", JSON.stringify(orderDetail))
         
        
 
