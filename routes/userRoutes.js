@@ -41,7 +41,7 @@ user_route.post('/forget',userController.manage_passwordchange);
 
 user_route.get('/home',nocache(),userController.loadHome);
 
-user_route.get('/',nocache(),userController.loadHome);
+
 
 user_route.get('/shop',userController.loadShop);
 
