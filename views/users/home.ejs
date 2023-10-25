@@ -39,11 +39,11 @@
     <hr style="width: auto;height: 10px;background-color: black;"> 
 </section>
 <br><br>
-<div class="container" id="top-cards">
-    <div class="row">
+<div class="container" id="top-cards" >
+    <div class="row" style="margin-left: 25px;">
         <% category.forEach(function(item) { %>
-        <div class=" col-md-4 ">
-            <div class="card text-center mb-4" style="width: 18rem; justify-content: space-between; border-color: white;">
+        <div class="col-md-4" >
+            <div class="card text-center mb-4" style="width: 18rem; border-color: white;">
                 <img src="categoryimages/<%= item.image %>"  width="60px" height="150px" alt="<%= item.image %>" class="card-img-top" >
                 <div class="card-body">
                   <h5 class="card-title"><strong><%= item.name %></strong></h5>

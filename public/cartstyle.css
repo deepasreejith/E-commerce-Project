@@ -1,4 +1,4 @@
-.cart-page{
+/*.cart-page{
  margin: 80px auto;  
 
 }
@@ -47,6 +47,34 @@ td:last-child{
 }
 th:last-child{
     text-align: right;
-}
+}*/
+/* Add your custom styles here for responsiveness */
+
+/* Example: Reduce font size for mobile screens */
+@media (max-width: 768px) {
+    /* Reduce font size for buttons and labels */
+    .cart-item-count,
+    .total-price td strong,
+    .total-price input {
+      font-size: 14px;
+    }
+    .productdetail{
+        font-size: 14px;
+    }
+    
+    /* Adjust table column widths for mobile */
+    table {
+      width: 100%;
+      margin-top: 20px;
+    }
+  
+    /* Make the "Place Order" button full-width */
+    #placeorder {
+      width: 100%;
+    }
+
+    
+  }
+  
 
   

@@ -1,38 +1,37 @@
 <%-include('../layouts/header.ejs') %>
-
-    <a style="margin-left: 850px;" href="/addaddress?action=addaddress"><button type="button"  class="btn btn-light " style="background-color: rgb(250, 191, 241); width: 200px; height: 40px; font-size: large; margin-top: 50px;  border-radius: 25px;"   >+ Add Address </button></a> 
- 
+<div style="overflow: hidden; margin-top: 50px;">
+ <div class="container col-md-8"><a href="/addaddress?action=addaddress"><button type="button"  class="btn btn-light " style="background-color: rgb(250, 191, 241); width: 200px; height: 40px; font-size: large;   border-radius: 25px; float: right;"   >+ Add Address </button></a></div>
+<div class="container box col-md-8" style="border: 2px solid #dbcdcd; padding: 20px; border-radius: 20px; box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); margin-top: 50px;">
+   
+    <h5 style="text-align: center;"><strong>My Addresses</strong></h5>
+    <br>
+    <div class="table-responsive"> <!-- Added for mobile responsiveness -->
+        <table class="table table-striped"> <!-- Replaced inline styles with Bootstrap classes -->
+            <thead>
+                <tr>
+                    <th>NAME</th>
+                    <th>ADDRESS</th>
+                    <th>PIN</th>
+                    <th>MOBILE</th>
+                    <th>ACTION</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% address.forEach(function(item) { %>
+                    <tr>
+                        <td> <%= item.name %> </td>
+                        <td><%= item.address %></td>
+                        <td> <%= item.pin %> </td>
+                        <td><%= item.mobile %></td>
+                        <td>
+                            <a href="/editaddress?id=<%= item._id %>" type="button" class="btn btn-success btn-sm">Edit </a>
+                            <a href="/deleteaddress?id=<%= item._id %>" type="button" class="btn btn-danger btn-sm">Delete</a>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
 </div>
-<div class="container  box col-md-7"  style="border: 2px solid #dbcdcd; padding: 20px; border-radius: 20px;box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-    <h5 style=" text-align: center;" ><strong>My Addresses</strong></h5>
-  <br>
-    <table style=" width: 700px; margin-left: 10px;" >
-       
-       
-        <tr>
-           
-            <th>NAME</th>
-            <th>ADDRESS</th>
-            <th>PIN</th>
-            <th>MOBILE NO</th>
-            <th>ACTION</th>
-        </tr>
-       
-        <% address.forEach(function(item) { %>
-          
-        <tr>
-            <td> <%= item.name %> </td>
-            <td><%= item.address %></td>
-            <td> <%= item.pin %> </td>
-            <td><%= item.mobile %></td>
-            <td ><a href="/editaddress?id=<%= item._id %>" type="button" class="btn btn-success btn-sm">Edit </a>
-                  <a href="/deleteaddress?id=<%= item._id %>" type="button" class="btn btn-danger btn-sm">Delete</a> 
-                </td>
-
-        </tr>
-        <% }); %>
-    </table>
-
 </div>
-
 <%-include('../layouts/footer.ejs') %>

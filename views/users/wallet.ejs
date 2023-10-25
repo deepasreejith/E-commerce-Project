@@ -1,9 +1,14 @@
 <%-include('../layouts/header.ejs') %>
 <br>
-<h5 style="margin-left: 900px; color: green;"><strong>Wallet Balance:Rs  <%= wallet.amount %> </strong></h5>
-<h6 style="text-align: center;"><strong>Wallet Transactions</strong></h6>
-    <div class="container"  style="width: 70%;   text-align:left;border: 2px solid #dbcdcd; padding: 20px; border-radius: 20px;box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); margin-bottom: 80px;">
-        <table class="table table-striped" style="margin-left: 10px;">
+<div class="container" style="overflow: hidden; margin-top: 50px;">
+      
+        <h5 style="color: green;"><strong>Wallet Balance:Rs  <%= wallet.amount %> </strong></h5>
+      
+    <div class="container"  style=" text-align:left;border: 2px solid #dbcdcd; padding: 20px; border-radius: 20px;box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); margin-bottom: 80px;">
+      <h6 style="text-align: center;"><strong>Wallet Transactions</strong></h6>
+      <br>
+      <div class="table-responsive">
+      <table class="table table-striped " style="margin-left: 10px;">
             <thead>
               <tr>
                 <th scope="col"><strong>Order ID</strong></th>
@@ -54,6 +59,7 @@
                     <% }); %>
             </tbody>
           </table>
-          
         </div>
+        </div>
+      </div>
         <%-include('../layouts/footer.ejs') %>

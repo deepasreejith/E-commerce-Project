@@ -1,102 +1,85 @@
 <%-include('../layouts/header.ejs') %>
 
-<div class="container cart-page" style="display: flex;justify-content: space-around;">
-    <table class="col-12 col-md-6"  style="background-color: white;  " >
-        <tr>
-            <th>PRODUCT</th>
-            <th style="padding-left: 100px;">QUANTITY</th>
-            <th>SUBTOTAL</th>
-        </tr>
-        <% let overallTotal = 0; %>
-        <% cartitems.forEach(function(item) { %>
-          <% let subtotal = item.quantity * item.productDetails.selling_price; %>
-            <% overallTotal += subtotal; %>
-        <tr>
-            <td>
-             
-              <div class="cart-info">
-                <img src="productimages/<%= item.productDetails.images[0] %>"  width="60px" height="50px">
-                <div>
-                  <p><strong><%= item.productDetails.name %></strong></p>
-                  <small>Rs:<%= item.productDetails.selling_price %></small>
-                  
-                  <br>
-                  <a href="/productremove?cartid=<%= item._id%>&productid=<%= item.item %>">Remove</a>
-                </div>
-              </div>
-              
-            </td>
-            <td style="padding-left: 100px;">
-              <button class="cart-item-count " id="minusButtonForProduct<%= item.item %>" onclick="minusbutton('<%= item._id%>','<%= item.item %>','<%= item.productDetails.selling_price %>')" <%= item.quantity === 1 ? 'disabled' : '' %> >-</button>&nbsp; 
-              <span id="quantityForProduct<%= item.item %>"><%= item.quantity %></span>&nbsp;
-              
-              <% if (item.Lflag === 1) { %>
-                <button class="cart-item-count   " id="plusbutton<%= item.item %>" onclick="plusbutton('<%= item._id%>','<%= item.item %>','<%= item.productDetails.selling_price %>')" disabled>+</button>
-                <span  id="quantity_check<%= item.item %>" style="color: red;"> Limit exceeded </span>
-                
-              <% } else if ( item.Qflag  === 1) { %>
-                <button class="cart-item-count   " id="plusbutton<%= item.item %>" onclick="plusbutton('<%= item._id%>','<%= item.item %>','<%= item.productDetails.selling_price %>')" disabled>+</button>
-                <span  id="quantity_check<%= item.item %>" style="color: red;"> Out of stock </span>
-                
-              <% } else { %>
-                <button class="cart-item-count   " id="plusbutton<%= item.item %>" onclick="plusbutton('<%= item._id%>','<%= item.item %>','<%= item.productDetails.selling_price %>')" >+</button>
-                <span  id="quantity_check<%= item.item %>" style="color: red;"> </span>
-              <% } %>
-              
-
-            </td>
-            
-            <td id="subtotal<%= item.item %>"> <%= subtotal %></td>
-
-        </tr>
-        <% }); %>
-
-    </table>
-
-<div class=" col-10 col-md-6 total-price" >
-  
-  <table  style="border: 2px solid #dbcdcd; padding: 20px; box-shadow: 2px 2px 5px rgba(59, 59, 59, 0.3);  background-color: white;" >
-   
-    <tr>
-      <td><strong>TOTAL</strong></td>
-      <td id="total"><strong> <%= overallTotal %> </strong> </td>
-    </tr>
-    
-    <tr>
-      <td><div class="input-group ">
-        <input type="text" class="form-control " name="coupon" placeholder="Coupon Code" aria-label="Coupon Code" aria-describedby="basic-addon2">
-        <div class="input-group-append">
-          <button class="btn btn-outline-secondary" type="button" onclick= "coupon()">Apply</button>
-        </div>
-      </div></td>
-      
-    </tr>
-    <tr><td> <span id="message" style="color: red;"></span></td></tr>
-    <tr  style="color: green;">
-      <td><strong>Discount Amount</strong></td>
-      <td id="save"><strong>0</srtong></td>
-    </tr>
-    <tr>
-      <td><strong>SUBTOTAL</strong></td>
-      <td id="final"><strong><%= overallTotal %></strong> </td>
+<div class="container cart-page" style="margin-top: 100px; margin-bottom: 100px;">
+  <div class="row">
+    <!-- Cart Table -->
+    <div class="col-12 col-md-7 total-price" >
+    <table class=" productdetail" style="background-color: white; width: 100%;">
+      <!-- Table Headers -->
+      <tr>
+        <th>PRODUCT</th>
+        <th>QUANTITY</th>
+        <th>SUBTOTAL</th>
       </tr>
-      
-  </table>
-  <div class="m-3 " style=" text-align: center;max-width: 350px; padding-left: 110px;">
-    <a href="#" onclick="placeOrder()" id="placeorder" class=" btn btn-light" style=" background-color: rgb(250, 191, 241); width: 300px; height: 40px; border-radius: 50px; font-size: large;" >Place Order</a>
-      <% if(typeof message !=='undefined'){
-      %>
-      <p style="color: red">
-      <strong>  <%= message %> </strong>
-      </p>
-      <%
-      }
-      %>
+      <!-- Cart Items Loop -->
+      <% let overallTotal = 0; %>
+      <% cartitems.forEach(function(item) { %>
+        <% let subtotal = item.quantity * item.productDetails.selling_price; %>
+        <% overallTotal += subtotal; %>
+        <!-- Cart Item Row -->
+        <tr>
+          <td>
+            <div class="cart-info">
+              <img src="productimages/<%= item.productDetails.images[0] %>" width="60px" height="50px">
+              <div>
+                <p><strong><%= item.productDetails.name %></strong></p>
+                <small>Rs:<%= item.productDetails.selling_price %></small>
+                <br>
+                <a href="/productremove?cartid=<%= item._id%>&productid=<%= item.item %>" style="color: red">Remove</a>
+              </div>
+            </div>
+          </td>
+          <td>
+            <!-- Quantity Buttons -->
+            <button class="cart-item-count" id="minusButtonForProduct<%= item.item %>" onclick="minusbutton('<%= item._id%>','<%= item.item %>','<%= item.productDetails.selling_price %>')" <%= item.quantity === 1 ? 'disabled' : '' %> >-</button>
+            <span id="quantityForProduct<%= item.item %>"><%= item.quantity %></span>
+            <button class="cart-item-count" id="plusbutton<%= item.item %>" onclick="plusbutton('<%= item._id%>','<%= item.item %>','<%= item.productDetails.selling_price %>')" <%= item.Lflag === 1 || item.Qflag === 1 ? 'disabled' : '' %> >+</button>
+            <span id="quantity_check<%= item.item %>" style="color: red;"><%= item.Lflag === 1 ? 'Limit exceeded' : (item.Qflag === 1 ? 'Out of stock' : '') %></span>
+          </td>
+          <td id="subtotal<%= item.item %>"> <%= subtotal %></td>
+        </tr>
+      <% }); %>
+    </table>
   </div>
-</div> 
-
- 
+    <!-- Cart Summary -->
+    <div class="col-12 col-md-5 total-price" style="padding: 5px;" >
+      <table style="border: 2px solid #dbcdcd; padding: 20px; box-shadow: 2px 2px 5px rgba(59, 59, 59, 0.3); background-color: white; width: 80%;line-height: 40px;margin-left: 40px;">
+        <tr>
+          <td><strong>TOTAL</strong></td>
+          <td id="total"><strong><%= overallTotal %></strong></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="input-group">
+              <input type="text" class="form-control" name="coupon" placeholder="Coupon Code" aria-label="Coupon Code" aria-describedby="basic-addon2">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" onclick="coupon()">Apply</button>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td> <span id="message" style="color: red;"></span></td>
+        </tr>
+        <tr style="color: green;">
+          <td><strong>Discount Amount</strong></td>
+          <td id="save"><strong>0</strong></td>
+        </tr>
+        <tr>
+          <td><strong>SUBTOTAL</strong></td>
+          <td id="final"><strong><%= overallTotal %></strong></td>
+        </tr>
+      </table>
+      <div class="m-3 text-center" >
+        <a href="#" onclick="placeOrder()" id="placeorder" class="btn btn-light" style="background-color: rgb(250, 191, 241); width: 50%; border-radius: 50px; font-size: large;width: 80%;" >Place Order</a>
+        <% if (typeof message !== 'undefined') { %>
+          <p style="color: red"><strong><%= message %></strong></p>
+        <% } %>
+      </div>
+    </div>
+  </div>
 </div>
+
 
 <script>
  //trst

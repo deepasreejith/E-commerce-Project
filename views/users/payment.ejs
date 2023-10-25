@@ -1,133 +1,117 @@
 <%-include('../layouts/header.ejs') %>
-<br>
-<h4 style="text-align: center;"><strong>Order Review</strong></h4>
-<div class="container" style=" display: flex; width: auto;margin-top: 10px;height: auto;justify-content:space-around" >
- <!-- style="margin-top: 200px;margin-bottom: 200px; text-align: center;"-->
- 
- <div class=" col-md-6 " style="display: flex-box;">
-<div class="box" style="border: 2px solid #dbcdcd; padding: 20px; border-radius: 20px;box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);line-height: 1;">
-  <h6><strong>Delivery Address</strong></h6>
-  <hr style="color: black;">
-  <p ><%= address.name%></p>
-  <p><%= address.address%></p>
-  <p>PIN:<%= address.pin%></p>
-  <p>MOBILE:<%= address.mobile%></p>
-  
-</div>
-<br>
-<div class="cartitems" style="background-color: rgb(255, 250, 250);">
-  <table style=" margin-bottom: 200px; width: 560px;margin-left:0 ;">
-  <tr>
-     
-      <th><strong> Product</strong></th>
-      <th><strong>Quantity</strong></th>
-      <th><strong>Subtotal</strong></th>
-  </tr>
-  <% let overallTotal = 0; %>
-  <% cartDetail.forEach(function(item) { %>
-    <% let subtotal = item.quantity * item.productDetails.selling_price; %>
-      <% overallTotal += subtotal; %>
-  <tr>
-      <td>
-       
-        <div class="cart-info">
-          <img src="productimages/<%= item.productDetails.images[0] %>"  width="60px" height="50px">
-          <div>
-            <p><strong><%= item.productDetails.name %></strong></p>
-            <small>Rs:<%= item.productDetails.selling_price %></small>
-            
-          </div>
-        </div>
-        
-      </td>
-      <td><%= item.quantity %></td>
-      <td id="subtotal<%= item.item %>"><%= subtotal %></td>
-
-  </tr>
-  <% }); %>
-  </table>
-</div>
-
- </div>
-
- <div class="rightportion" style="display: flex-box; " >
-  <div class="box" style="border: 2px solid #dbcdcd; padding: 20px; border-radius: 20px;box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);line-height: 1;" >
-    <h6><strong>Payment Details</strong></h6>
-    <hr style="color: black;">
-    <table style="margin: 5px; width: 400px;">
-      <tr>
-        <td>MRP Total</td>
-        <td><strong>Rs: <%= cartitems[0].total %></strong></td>
-      </tr>
-      <tr>
-        <td>Product Discount</td>
-        
-        <td><strong>Rs: <%= cartitems[0].discountAmount %></strong></td>
-      </tr>
-      <tr>
-        <td>Subtotal</td>
-        <td>Rs: <strong id="subtotalvalue"><%= cartitems[0].subtotal %></strong></td>
-      </tr>
-    </table>
-    
-  </div>
-
-  <div class=" box"  style="border: 2px solid #dbcdcd; padding: 20px; border-radius: 20px;box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);line-height: 1; height: 300px; margin-top: 25px;">
-    <h6><strong>Payment Method</strong></h6>
-    <hr style="color: black;">
-    <div class="form-check " >
-      
-      
-      <div class="card  "  >
-          <div class="card-body">
-              <div class="form-check">
-                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="1">
-                  <label class="form-check-label" for="flexRadioDefault1">
-                    Cash on Delivery
-                  </label>
-                </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" value="2" >
-                  <label class="form-check-label" for="flexRadioDefault2">
-                    Net banking
-                  </label>
-                </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3" value="3" >
-                  <label class="form-check-label" for="flexRadioDefault3">
-                   Wallet
-                  </label>
-                </div>
-                <div id="walletDetails" style="display: none;">
-                  Wallet Amount: Rs<span id="walletAmount" style="color: green;"> <%= walletAmount %></span>
-                  <div class="form-check" id="checkbox" style="display: none;">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">
-                      Use Net Banking for remaining amount (Rs <b id="balance">0</b>)
-                    </label>
+<div class="container">
+  <br>
+  <h4 style="text-align: center;"><strong>Order Review</strong></h4>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="box" style="border: 2px solid #dbcdcd; padding: 20px; border-radius: 20px; box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);">
+        <h6><strong>Delivery Address</strong></h6>
+        <hr style="color: black;">
+        <p><%= address.name %></p>
+        <p><%= address.address %></p>
+        <p>PIN: <%= address.pin %></p>
+        <p>MOBILE: <%= address.mobile %></p>
+      </div>
+      <br>
+      <div class="cartitems" style="background-color: rgb(255, 250, 250); overflow-x: auto;">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col"><strong>Product</strong></th>
+              <th scope="col"><strong>Quantity</strong></th>
+              <th scope="col"><strong>Subtotal</strong></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% let overallTotal = 0; %>
+            <% cartDetail.forEach(function(item) { %>
+              <% let subtotal = item.quantity * item.productDetails.selling_price; %>
+              <% overallTotal += subtotal; %>
+              <tr>
+                <td>
+                  <div class="cart-info" style="display: flex; align-items: center;">
+                    <img src="productimages/<%= item.productDetails.images[0] %>" width="60px" height="50px">
+                    <div>
+                      <p><strong><%= item.productDetails.name %></strong></p>
+                      <small>Rs: <%= item.productDetails.selling_price %></small>
+                    </div>
                   </div>
+                </td>
+                <td><%= item.quantity %></td>
+                <td id="subtotal<%= item.item %>"><%= subtotal %></td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    <div class="col-md-6">
+      <div class="box" style="border: 2px solid #dbcdcd; padding: 20px; border-radius: 20px; box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);">
+        <h6><strong>Payment Details</strong></h6>
+        <hr style="color: black;">
+        <table class="table">
+          <tbody>
+            <tr>
+              <td>MRP Total</td>
+              <td><strong>Rs: <%= cartitems[0].total %></strong></td>
+            </tr>
+            <tr>
+              <td>Product Discount</td>
+              <td><strong>Rs: <%= cartitems[0].discountAmount %></strong></td>
+            </tr>
+            <tr>
+              <td>Subtotal</td>
+              <td>Rs: <strong id="subtotalvalue"><%= cartitems[0].subtotal %></strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <br>
+      <div class="box" style="border: 2px solid #dbcdcd; padding: 20px; border-radius: 20px; box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);">
+        <h6><strong>Payment Method</strong></h6>
+        <hr style="color: black;">
+        <div class="form-check">
+          <div class="card">
+            <div class="card-body">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="1">
+                <label class="form-check-label" for="flexRadioDefault1">Cash on Delivery</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" value="2">
+                <label class="form-check-label" for="flexRadioDefault2">Net banking</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3" value="3">
+                <label class="form-check-label" for="flexRadioDefault3">Wallet</label>
+              </div>
+              <div id="walletDetails" style="display: none;">
+                Wallet Amount: Rs<span id="walletAmount" style="color: green;"> <%= walletAmount %></span>
+                <div class="form-check" id="checkbox" style="display: none;">
+                  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                  <label class="form-check-label" for="flexCheckDefault">Use Net Banking for remaining amount (Rs <b id="balance">0</b>)</label>
                 </div>
+              </div>
+            </div>
           </div>
         </div>
+        <div style="margin-left: 30px;">
+          <% if (typeof message !== 'undefined') { %>
+            <p style="color: red;">
+              <%= message %>
+            </p>
+          <% } %>
+          <br>
+          <a href="#" onclick="checkout('<%= walletAmount %>')">
+            <button type="button" class="btn btn-light" style="background-color: rgb(250, 191, 241); width: 100%;  height: 40px; border-radius: 50px; font-size: large; margin: 0 auto;">Checkout</button>
+          </a>
+        </div>
+      </div>
     </div>
-    <div style="margin-left: 30px;">
-      <% if(typeof message !=='undefined'){
-        %>
-        <p style="color: red;">
-        <%= message %>
-        </p>
-        <%
-        }
-        %>
-     <br>
-    <a href="#"  onclick="checkout('<%= walletAmount %>')"> <button type="button" class="btn btn-light" style="background-color: rgb(250, 191, 241);width: 300px; height: 40px; border-radius: 50px; font-size: large; margin-left: 40px;">Checkout</button></a>
-    </div>
-     </div>
+  </div>
+</div>
 
- </div>
- 
- 
-</div> 
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>

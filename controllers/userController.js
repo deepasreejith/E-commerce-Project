@@ -42,15 +42,12 @@ const resend = async(req,res)=>{
     const email = req.query.emailid;
     const flag = req.query.flag;
     const otp = otpGenerator.generate(4, { upperCase: true, specialChars: false });
-    user_reg_check_resend(flag,email,otp)
+    user_reg_check_resend(flag,email,otp,req,res)
 }
 
-const user_reg_check_resend = async(flag,email,otp)=>{
-   // const category = await Category.find({})
+const user_reg_check_resend = async(flag,email,otp,req,res)=>{
     const userCheck = await user_reg.find({$and :[{email:email},{otpFlag:flag}]});
-    console.log("usercheck:"+userCheck);
     if(userCheck.length !== 0){
-        console.log("not null check")
     const userUpdate = await user_reg.updateOne(
             {
               $and: [
@@ -65,11 +62,12 @@ const user_reg_check_resend = async(flag,email,otp)=>{
              
           );
           if(userUpdate){
+           
             sendVerifyOtp(email,otp)
             
           }
     }else{
-        console.log('else check')
+       
         insertOtp_resend(flag,email,otp)
     }
 }
@@ -85,7 +83,7 @@ const insertOtp_resend = async(flag,email,otp)=>{
             otpFlag:flag
         });
         const user_regData = await register_user.save();
-        console.log(user_regData)
+       
         if(user_regData){
             sendVerifyOtp(email,otp);
             
@@ -139,6 +137,7 @@ const user_reg_check = async(req,res,email,otp)=>{
     const userCheck = await user_reg.find({$and :[{email:email},{otpFlag:0}]});
     let count=null
     if(userCheck.length !== 0){
+       
     const userUpdate = await user_reg.updateOne(
             {
               $and: [
@@ -180,6 +179,7 @@ const user_signin = async(req,res)=>{
              nameValue = req.body.name;
             if(userotp === otp){ 
                 const userExist = await User.find({email:email})
+                console.log("userexist:"+userExist)
                 if(userExist.length === 0){
                 
                 insertUser(req,res)
@@ -292,6 +292,7 @@ const loadLogin = async(req,res)=>{
 }
 //login user manage by otp
 const manage_user = async(req,res)=>{
+    
     try{
      const category = await Category.find({})
      const action = req.body.action;
@@ -392,10 +393,15 @@ const user_login = async(req,res)=>{
         const category = await Category.find({})
         const email = req.body.email;
         const otp = req.body.otp; 
-        const password = req.body.password
-        const status = await User.findOne({$and :[{email:email},{status:"Blocked"}]})
+        const password = req.body.password;
+        const existUser = await User.findOne({email:email});
         let emailValue = '';
         let passwordValue = '';
+        if(!existUser){
+            res.render('login',{message:"Please Kindly Register ",category,emailValue,passwordValue,count})
+        }else{
+        const status = await User.findOne({$and :[{email:email},{status:"Blocked"}]})
+        
         if( status === null )
         {
         const userData1 = await user_reg.find({$and :[{email:email},{otpFlag:1}]}).sort({createdAt:-1}).limit(1);
@@ -420,6 +426,7 @@ const user_login = async(req,res)=>{
         }
     }else{
         res.render('login',{message :"User Blocked",category,emailValue,passwordValue,count})
+    }
     }
        }catch(error){
         console.log(error.message)
@@ -561,7 +568,7 @@ const changePassword = async(req,res)=>{
                 const userPasswordUpdate = await User.updateOne( { email:email}, { $set: { password: spassword }});
                    
                 }else{
-                    res.render('forget',{emailValue,passwordValue,message:"check your mailid",category,count})
+                    res.render('forget',{emailValue,passwordValue,message:"User not registered",category,count})
                 }
             }else{
                 res.render('forget',{emailValue,passwordValue,message :"incorrect otp",category,count})
@@ -1540,22 +1547,47 @@ const success = async(req,res)=>{
 //order history showing 
 const orderHistory = async(req,res)=>{
     try {
-        const ITEMS_PER_PAGE = 8; 
-        const page = req.query.page || 1;
-        let userid = req.session.user;
-        const user = await User.findOne({_id:userid})
-        const category = await Category.find({})
-        let count = await cartCount(userid)
-        const order = await Order.find({user_id:userid})
-            .sort({ date: -1 })
-            .skip((page - 1) * ITEMS_PER_PAGE)
-            .limit(ITEMS_PER_PAGE);
-        const totalOrders = await Order.countDocuments();
-        const totalPages = Math.ceil(totalOrders / ITEMS_PER_PAGE);    
+        const ITEMS_PER_PAGE = 8;
+        const currentPage = parseInt(req.query.page) || 1;
 
-        res.render('orderhistory',{order,user,category,count,moment,totalPages, currentPage: page})
+        let userid = req.session.user;
+        const user = await User.findOne({ _id: userid });
+        const category = await Category.find({});
+        let count = await cartCount(userid);
+
+        const totalOrders = await Order.countDocuments();
+        const totalPages = Math.ceil(totalOrders / ITEMS_PER_PAGE);
+
+        // Ensure currentPage is within valid bounds
+        if (currentPage < 1) {
+            currentPage = 1;
+        } else if (currentPage > totalPages) {
+            currentPage = totalPages;
+        }
+
+        // Calculate previous and next page numbers
+        const previous = currentPage - 1;
+        const next = currentPage + 1;
+
+        // Query your data for the current page
+        const order = await Order.find({ user_id: userid })
+            .sort({ date: -1 })
+            .skip((currentPage - 1) * ITEMS_PER_PAGE)
+            .limit(ITEMS_PER_PAGE);
+
+        res.render('orderhistory', {
+            order,
+            user,
+            category,
+            count,
+            moment,
+            currentPage,
+            previous,
+            next,
+            totalpages: totalPages
+        });
     } catch (error) {
-        console.log(error.message)
+        console.log(error.message);
     }
 }
 //view order details
@@ -2284,10 +2316,24 @@ const downloadInvoice = async(req,res)=>{
         border:"10mm"
        }
        const ejsData = ejs.render(styledHtmlString,data);
-       pdf.create(ejsData,options).toFile('invoice.pdf',(err,response)=>{
-        if(err) console.log(err);
 
-       const filePath = path.resolve(__dirname,'../invoice.pdf');
+       const downloadDirectory = 'D:\\downloads'; // Specify the absolute path to the 'Downloads' folder on your D drive
+        const filename = 'invoice.pdf';
+        const filePath = path.resolve(downloadDirectory, filename);
+        pdf.create(ejsData, options).toFile(filePath, (err, response) => {
+            if (err) {
+              console.log(err);
+              return res.status(500).send('Could not generate the PDF');
+            }
+
+      /* pdf.create(ejsData,options).toFile('invoice.pdf',(err,response)=>{
+        if(err) {
+            console.log(err);
+            return res.status(500).send('Could not generate the PDF');
+        }*/
+
+      // const filePath = path.resolve(__dirname,'../invoice.pdf');
+      
         fs.readFile(filePath,(err,file)=>{
             if(err){
                 console.log(err);

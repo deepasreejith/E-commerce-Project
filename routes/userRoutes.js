@@ -20,7 +20,7 @@ user_route.set('view engine','ejs');
 user_route.set('views','./views/users');
 
 user_route.use(express.json());
-user_route.use(express.urlencoded({extended:false}))
+user_route.use(express.urlencoded({extended:true}))
 
 
 const userController = require('../controllers/userController');
@@ -41,7 +41,7 @@ user_route.post('/forget',userController.manage_passwordchange);
 
 user_route.get('/home',nocache(),userController.loadHome);
 
-//delete
+user_route.get('/',nocache(),userController.loadHome);
 
 user_route.get('/shop',userController.loadShop);
 

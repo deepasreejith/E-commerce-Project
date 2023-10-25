@@ -29,7 +29,8 @@
       <nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgb(249, 217, 244); height:auto">
         <div class="container-fluid">
           <a class="navbar-brand" style="color: black;" href="#"><strong>Beauty Bonanza</strong></a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
            
@@ -95,7 +96,7 @@
             </ul>
             <div
               class="btn-group"
-              style="margin-right: 25px; border-radius: 10"
+              style="border-radius: 10"
             >
               <button
                 class="btn btn-light btn-sm dropdown-toggle"
@@ -119,7 +120,7 @@
                 <% } %>
               </ul>
 
-              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <!--  <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
                   <a class="nav-link active" aria-current="page" href="/cart"
                     ><i
@@ -129,9 +130,15 @@
                     <span class="badge bg-danger"><%= count %></span>
                   </a>
                 </li>
-              </ul>
+              </ul>-->
             </div>
           </div>
+          <div class="navbar-cart">
+            <a class="nav-link active" aria-current="page" href="/cart">
+                <i class="fa-solid fa-cart-shopping" style="color: #000000"></i>
+                <span class="badge bg-danger"><%= count %></span>
+            </a>
+        </div>
         </div>
       </nav>
     </header>

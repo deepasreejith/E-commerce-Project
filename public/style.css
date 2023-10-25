@@ -24,3 +24,16 @@ header{
 footer{
     margin-top: auto;
 }
+.navbar-cart {
+    display: flex;
+    align-items: center;
+    margin-left: auto; /* Pushes the cart icon to the right */
+}
+
+/* Styles for smaller screens (e.g., mobile) */
+@media (max-width: 991px) {
+    .navbar-cart {
+        display: inline; /* Inline display for smaller screens */
+        margin-left: 20px; /* Adjust the value as needed */
+    }
+}
